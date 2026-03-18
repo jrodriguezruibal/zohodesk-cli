@@ -38,10 +38,11 @@ type TicketCreateRequest struct {
 }
 
 type TicketUpdateRequest struct {
-	Status     string `json:"status,omitempty"`
-	Priority   string `json:"priority,omitempty"`
-	AssigneeID string `json:"assigneeId,omitempty"`
-	Resolution string `json:"resolution,omitempty"`
+	Status       string `json:"status,omitempty"`
+	Priority     string `json:"priority,omitempty"`
+	AssigneeID   string `json:"assigneeId,omitempty"`
+	DepartmentID string `json:"departmentId,omitempty"`
+	Resolution   string `json:"resolution,omitempty"`
 }
 
 type Contact struct {

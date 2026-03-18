@@ -77,6 +77,54 @@ func (s *TicketsService) GetFull(ctx context.Context, ticketID string) (*models.
 	}, nil
 }
 
+func (s *TicketsService) GetWithContext(ctx context.Context, ticketID string) (*models.TicketContext, error) {
+	ticket, err := s.Get(ctx, ticketID)
+	if err != nil {
+		return nil, err
+	}
+
+	context := &models.TicketContext{
+		Ticket: ticket,
+	}
+
+	// Get contact
+	if ticket.ContactID != "" {
+		context.Contact, _ = s.GetContact(ctx, ticket.ContactID)
+	}
+
+	// Get threads
+	context.Threads, _ = s.GetThreads(ctx, ticketID)
+	if context.Threads != nil {
+		context.ThreadCount = len(context.Threads)
+	}
+
+	// Get department
+	if ticket.DepartmentID != "" {
+		dept, err := NewDepartmentsService(s.client).Get(ctx, ticket.DepartmentID)
+		if err == nil {
+			context.Department = dept
+		}
+	}
+
+	// Get assignee
+	if ticket.AssigneeID != "" {
+		agent, err := NewAgentsService(s.client).Get(ctx, ticket.AssigneeID)
+		if err == nil {
+			context.Assignee = agent
+		}
+	}
+
+	return context, nil
+}
+
+func (s *TicketsService) Assign(ctx context.Context, ticketID string, agentID string, departmentID string) (*models.Ticket, error) {
+	req := models.TicketUpdateRequest{
+		AssigneeID:   agentID,
+		DepartmentID: departmentID,
+	}
+	return s.Update(ctx, ticketID, req)
+}
+
 func (s *TicketsService) Create(ctx context.Context, req models.TicketCreateRequest) (*models.Ticket, error) {
 	if req.Email != "" && req.ContactID == "" {
 		req.Email = ""

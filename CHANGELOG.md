@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.2] - 2026-03-18
+
+### Added
+- **Departments Commands**: Manage Zoho Desk departments
+  - `departments list` - List all departments
+  - `departments get <id>` - Get department details
+- **Agents Commands**: Manage Zoho Desk agents
+  - `agents list` - List all agents
+  - `agents get <id>` - Get agent details
+- **Ticket Context Enrichment**: Get tickets with full context
+  - `tickets get <id> --context` - Show ticket with department, assignee, and SLA info
+- **Ticket Assignment**: Assign tickets to agents and departments
+  - `tickets assign <id> --agent <agent-id>` - Assign ticket to agent
+  - `tickets assign <id> --department <dept-id>` - Assign ticket to department
+  - `tickets assign <id> --agent <agent-id> --department <dept-id>` - Assign to both
+- New models: `SLA`, `Activity`, `TicketContext`
+- New services: `DepartmentsService`, `AgentsService`
+- Output formatters for departments and agents (JSON, YAML, Table)
+
+### Changed
+- Moved `Agent`, `Department` models to `pkg/models/resources.go`
+- Enhanced models with additional fields (createdTime, modifiedTime, phone, mobile, photoURL)
+
 ## [0.2.1] - 2026-03-18
 
 ### Added

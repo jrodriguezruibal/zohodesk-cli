@@ -62,6 +62,14 @@ var ticketsSearchCmd = &cobra.Command{
 	RunE:  runTicketsSearch,
 }
 
+var ticketsAssignCmd = &cobra.Command{
+	Use:   "assign <ticket-id>",
+	Short: "Assign a ticket",
+	Long:  `Assign a ticket to an agent and/or department.`,
+	Args:  cobra.ExactArgs(1),
+	RunE:  runTicketsAssign,
+}
+
 var (
 	flagStatus      string
 	flagPriority    string
@@ -77,6 +85,8 @@ var (
 	flagToDate      string
 	flagBatch       bool
 	flagBatchFile   string
+	flagContext     bool
+	flagAssignee    string
 )
 
 func init() {
@@ -87,12 +97,14 @@ func init() {
 	ticketsCmd.AddCommand(ticketsUpdateCmd)
 	ticketsCmd.AddCommand(ticketsCloseCmd)
 	ticketsCmd.AddCommand(ticketsSearchCmd)
+	ticketsCmd.AddCommand(ticketsAssignCmd)
 
 	ticketsListCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "filter by status (Open, Closed, On Hold)")
 	ticketsListCmd.Flags().StringVarP(&flagPriority, "priority", "P", "", "filter by priority (Low, Medium, High)")
 	ticketsListCmd.Flags().IntVarP(&flagLimit, "limit", "l", 50, "maximum number of tickets to return")
 
 	ticketsGetCmd.Flags().BoolVarP(&flagFull, "full", "f", false, "show full ticket with threads and contact")
+	ticketsGetCmd.Flags().BoolVarP(&flagContext, "context", "c", false, "show ticket with full context (department, assignee, SLA)")
 
 	ticketsCreateCmd.Flags().StringVarP(&flagSubject, "subject", "s", "", "ticket subject (required)")
 	ticketsCreateCmd.Flags().StringVarP(&flagDescription, "description", "d", "", "ticket description")
@@ -118,6 +130,9 @@ func init() {
 	ticketsSearchCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "filter by status")
 	ticketsSearchCmd.Flags().StringVarP(&flagFromDate, "from", "f", "", "from date (YYYY-MM-DD)")
 	ticketsSearchCmd.Flags().StringVarP(&flagToDate, "to", "t", "", "to date (YYYY-MM-DD)")
+
+	ticketsAssignCmd.Flags().StringVarP(&flagAssignee, "agent", "a", "", "agent ID to assign")
+	ticketsAssignCmd.Flags().StringVarP(&flagDepartment, "department", "D", "", "department ID")
 }
 
 func newClient() (*api.Client, string, error) {
@@ -185,6 +200,14 @@ func runTicketsGet(cmd *cobra.Command, args []string) error {
 	ticketID := args[0]
 
 	out := getOutputFormat()
+
+	if flagContext {
+		ctxTicket, err := api.NewTicketsService(client).GetWithContext(context.Background(), ticketID)
+		if err != nil {
+			return fmt.Errorf("failed to get ticket context: %w", err)
+		}
+		return output.PrintTicketContext(ctxTicket, out)
+	}
 
 	if flagFull {
 		fullTicket, err := api.NewTicketsService(client).GetFull(context.Background(), ticketID)
@@ -314,4 +337,25 @@ func runTicketsSearch(cmd *cobra.Command, args []string) error {
 
 	out := getOutputFormat()
 	return output.PrintTickets(tickets, out)
+}
+
+func runTicketsAssign(cmd *cobra.Command, args []string) error {
+	client, _, err := newClient()
+	if err != nil {
+		return err
+	}
+
+	ticketID := args[0]
+
+	if flagAssignee == "" && flagDepartment == "" {
+		return fmt.Errorf("at least one of --agent or --department is required")
+	}
+
+	ticket, err := api.NewTicketsService(client).Assign(context.Background(), ticketID, flagAssignee, flagDepartment)
+	if err != nil {
+		return fmt.Errorf("failed to assign ticket: %w", err)
+	}
+
+	out := getOutputFormat()
+	return output.PrintTicket(ticket, out)
 }

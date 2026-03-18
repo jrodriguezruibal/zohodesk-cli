@@ -208,3 +208,128 @@ func printCommentTable(comment *models.Comment) error {
 func printBatchResultJSON(result *models.BatchResponse) error {
 	return printJSON(result)
 }
+
+func printDepartmentsTable(departments []models.Department) error {
+	if len(departments) == 0 {
+		fmt.Println("No departments found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Visible"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, d := range departments {
+		visible := "No"
+		if d.IsVisible {
+			visible = "Yes"
+		}
+		table.Append([]string{
+			d.ID,
+			d.Name,
+			visible,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d departments\n", len(departments))
+	return nil
+}
+
+func printDepartmentTable(department *models.Department) error {
+	fmt.Printf("\nDepartment: %s\n", department.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:        %s\n", department.Name)
+	if department.Description != "" {
+		fmt.Printf("Description: %s\n", department.Description)
+	}
+	fmt.Printf("Visible:     %v\n", department.IsVisible)
+	return nil
+}
+
+func printAgentsTable(agents []models.Agent) error {
+	if len(agents) == 0 {
+		fmt.Println("No agents found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Email", "Active"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, a := range agents {
+		active := "No"
+		if a.IsActive {
+			active = "Yes"
+		}
+		table.Append([]string{
+			a.ID,
+			a.Name,
+			a.Email,
+			active,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d agents\n", len(agents))
+	return nil
+}
+
+func printAgentTable(agent *models.Agent) error {
+	fmt.Printf("\nAgent: %s\n", agent.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:   %s\n", agent.Name)
+	fmt.Printf("Email:  %s\n", agent.Email)
+	if agent.Role != "" {
+		fmt.Printf("Role:   %s\n", agent.Role)
+	}
+	if agent.Phone != "" {
+		fmt.Printf("Phone:  %s\n", agent.Phone)
+	}
+	active := "Inactive"
+	if agent.IsActive {
+		active = "Active"
+	}
+	fmt.Printf("Status: %s\n", active)
+	return nil
+}
+
+func printTicketContextTable(context *models.TicketContext) error {
+	printTicketTable(context.Ticket)
+
+	if context.Contact != nil {
+		fmt.Println("\nContact:")
+		fmt.Printf("  Name:  %s %s\n", context.Contact.FirstName, context.Contact.LastName)
+		fmt.Printf("  Email: %s\n", context.Contact.Email)
+	}
+
+	if context.Department != nil {
+		fmt.Println("\nDepartment:")
+		fmt.Printf("  Name: %s\n", context.Department.Name)
+	}
+
+	if context.Assignee != nil {
+		fmt.Println("\nAssignee:")
+		fmt.Printf("  Name:  %s\n", context.Assignee.Name)
+		fmt.Printf("  Email: %s\n", context.Assignee.Email)
+	}
+
+	if len(context.Threads) > 0 {
+		fmt.Printf("\nThreads (%d):\n", len(context.Threads))
+		for i, thread := range context.Threads {
+			fmt.Printf("  %d. [%s] %s\n", i+1, thread.CreatedTime[:10], thread.ThreadType)
+		}
+	}
+
+	return nil
+}

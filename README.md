@@ -11,6 +11,9 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Self-Client OAuth**: No browser interaction required
 - **Batch operations**: Create, update, or close multiple tickets from JSON input
 - **Comments/Replies**: Add public replies and private notes to tickets
+- **Ticket assignment**: Assign tickets to agents and departments
+- **Context enrichment**: Get tickets with full context (department, assignee, SLA)
+- **Departments & Agents**: List and manage departments and agents
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -159,6 +162,54 @@ zohodesk-cli comments reply <ticket-id> --message "Thank you for your report"
 
 # Add a private note
 zohodesk-cli comments note <ticket-id> --message "Internal note for the team"
+```
+
+## Ticket Assignment
+
+Assign tickets to agents and departments:
+
+```bash
+# Assign to an agent
+zohodesk-cli tickets assign <ticket-id> --agent <agent-id>
+
+# Assign to a department
+zohodesk-cli tickets assign <ticket-id> --department <dept-id>
+
+# Assign to both
+zohodesk-cli tickets assign <ticket-id> --agent <agent-id> --department <dept-id>
+```
+
+## Ticket Context
+
+Get tickets with full context (department, assignee, SLA):
+
+```bash
+# Get ticket with enriched context
+zohodesk-cli tickets get <ticket-id> --context --output json
+```
+
+## Departments
+
+Manage Zoho Desk departments:
+
+```bash
+# List all departments
+zohodesk-cli departments list
+
+# Get department details
+zohodesk-cli departments get <dept-id>
+```
+
+## Agents
+
+Manage Zoho Desk agents:
+
+```bash
+# List all agents
+zohodesk-cli agents list
+
+# Get agent details
+zohodesk-cli agents get <agent-id>
 ```
 
 ## For AI Agents

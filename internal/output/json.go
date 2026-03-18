@@ -89,6 +89,61 @@ func PrintJSON(v interface{}) error {
 	return printJSON(v)
 }
 
+func PrintDepartments(departments []models.Department, format string) error {
+	switch format {
+	case "json":
+		return printJSON(departments)
+	case "yaml":
+		return printYAML(departments)
+	default:
+		return printDepartmentsTable(departments)
+	}
+}
+
+func PrintDepartment(department *models.Department, format string) error {
+	switch format {
+	case "json":
+		return printJSON(department)
+	case "yaml":
+		return printYAML(department)
+	default:
+		return printDepartmentTable(department)
+	}
+}
+
+func PrintAgents(agents []models.Agent, format string) error {
+	switch format {
+	case "json":
+		return printJSON(agents)
+	case "yaml":
+		return printYAML(agents)
+	default:
+		return printAgentsTable(agents)
+	}
+}
+
+func PrintAgent(agent *models.Agent, format string) error {
+	switch format {
+	case "json":
+		return printJSON(agent)
+	case "yaml":
+		return printYAML(agent)
+	default:
+		return printAgentTable(agent)
+	}
+}
+
+func PrintTicketContext(context *models.TicketContext, format string) error {
+	switch format {
+	case "json":
+		return printJSON(context)
+	case "yaml":
+		return printYAML(context)
+	default:
+		return printTicketContextTable(context)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

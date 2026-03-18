@@ -49,8 +49,29 @@ zohodesk-cli tickets get 123456789
 # Full ticket with threads and contact
 zohodesk-cli tickets get 123456789 --full
 
+# Ticket with full context (department, assignee, SLA)
+zohodesk-cli tickets get 123456789 --context
+
 # JSON output
 zohodesk-cli tickets get 123456789 --output json
+```
+
+### Assign Ticket
+
+```bash
+# Assign to an agent
+zohodesk-cli tickets assign 123456789 --agent 987654321
+
+# Assign to a department
+zohodesk-cli tickets assign 123456789 --department 456789
+
+# Assign to both agent and department
+zohodesk-cli tickets assign 123456789 \
+  --agent 987654321 \
+  --department 456789
+
+# JSON output
+zohodesk-cli tickets assign 123456789 --agent 987654321 --output json
 ```
 
 ### Create Ticket
@@ -124,6 +145,50 @@ zohodesk-cli tickets search \
 
 # JSON output
 zohodesk-cli tickets search --email user@example.com --output json
+```
+
+## Departments
+
+### List Departments
+
+```bash
+# List all departments
+zohodesk-cli departments list
+
+# JSON output
+zohodesk-cli departments list --output json
+```
+
+### Get Department
+
+```bash
+# Department details
+zohodesk-cli departments get 123456789
+
+# JSON output
+zohodesk-cli departments get 123456789 --output json
+```
+
+## Agents
+
+### List Agents
+
+```bash
+# List all agents
+zohodesk-cli agents list
+
+# JSON output
+zohodesk-cli agents list --output json
+```
+
+### Get Agent
+
+```bash
+# Agent details
+zohodesk-cli agents get 123456789
+
+# JSON output
+zohodesk-cli agents get 123456789 --output json
 ```
 
 ## Batch Operations

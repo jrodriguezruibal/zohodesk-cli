@@ -65,35 +65,6 @@ type BatchResponse struct {
 	Errors    []string      `json:"errors,omitempty"`
 }
 
-type Agent struct {
-	ID           string `json:"id" yaml:"id"`
-	Name         string `json:"name" yaml:"name"`
-	Email        string `json:"email" yaml:"email"`
-	Role         string `json:"role,omitempty" yaml:"role,omitempty"`
-	DepartmentID string `json:"departmentId,omitempty" yaml:"departmentId,omitempty"`
-	IsActive     bool   `json:"isActive" yaml:"isActive"`
-}
-
-type AgentListResponse struct {
-	Data []Agent `json:"data"`
-}
-
-type Department struct {
-	ID          string `json:"id" yaml:"id"`
-	Name        string `json:"name" yaml:"name"`
-	Description string `json:"description,omitempty" yaml:"description,omitempty"`
-	IsVisible   bool   `json:"isVisible" yaml:"isVisible"`
-}
-
-type DepartmentListResponse struct {
-	Data []Department `json:"data"`
-}
-
-type TicketAssignmentRequest struct {
-	AssigneeID   string `json:"assigneeId,omitempty"`
-	DepartmentID string `json:"departmentId,omitempty"`
-}
-
 type Tag struct {
 	ID   string `json:"id" yaml:"id"`
 	Name string `json:"name" yaml:"name"`
