@@ -511,3 +511,109 @@ func formatSize(bytes int64) string {
 		return fmt.Sprintf("%d B", bytes)
 	}
 }
+
+func printArticlesTable(articles []models.Article) error {
+	if len(articles) == 0 {
+		fmt.Println("No articles found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Title", "Status", "Author", "Created"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, a := range articles {
+		title := a.Title
+		if len(title) > 40 {
+			title = title[:37] + "..."
+		}
+		created := ""
+		if a.CreatedTime != "" {
+			created = a.CreatedTime[:10]
+		}
+		table.Append([]string{
+			a.ID,
+			title,
+			a.Status,
+			a.AuthorName,
+			created,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d articles\n", len(articles))
+	return nil
+}
+
+func printArticleTable(article *models.Article) error {
+	fmt.Printf("\nArticle: %s\n", article.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Title:    %s\n", article.Title)
+	if article.Summary != "" {
+		fmt.Printf("Summary:  %s\n", article.Summary)
+	}
+	fmt.Printf("Status:   %s\n", article.Status)
+	fmt.Printf("Author:   %s\n", article.AuthorName)
+	if article.CategoryName != "" {
+		fmt.Printf("Category: %s\n", article.CategoryName)
+	}
+	fmt.Printf("Views:    %d\n", article.ViewCount)
+	fmt.Printf("Likes:    %d\n", article.LikeCount)
+	fmt.Printf("Created:  %s\n", article.CreatedTime)
+	if article.ModifiedTime != "" {
+		fmt.Printf("Modified: %s\n", article.ModifiedTime)
+	}
+	if len(article.Tags) > 0 {
+		fmt.Printf("Tags:     %v\n", article.Tags)
+	}
+	if article.Content != "" {
+		fmt.Println("\nContent:")
+		fmt.Println(article.Content)
+	}
+	return nil
+}
+
+func printCategoriesTable(categories []models.Category) error {
+	if len(categories) == 0 {
+		fmt.Println("No categories found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Articles"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, c := range categories {
+		table.Append([]string{
+			c.ID,
+			c.Name,
+			fmt.Sprintf("%d", c.ArticleCount),
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d categories\n", len(categories))
+	return nil
+}
+
+func printCategoryTable(category *models.Category) error {
+	fmt.Printf("\nCategory: %s\n", category.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:     %s\n", category.Name)
+	if category.Description != "" {
+		fmt.Printf("Description: %s\n", category.Description)
+	}
+	fmt.Printf("Articles: %d\n", category.ArticleCount)
+	fmt.Printf("Created:  %s\n", category.CreatedTime)
+	return nil
+}

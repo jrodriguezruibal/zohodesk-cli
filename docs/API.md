@@ -447,6 +447,154 @@ zohodesk-cli attachments delete <attachment-id>
 |----------|-------------|----------|
 | `attachment-id` | Attachment ID | Yes |
 
+## Knowledge Base Commands
+
+### `zohodesk-cli articles list`
+
+List knowledge base articles.
+
+```bash
+zohodesk-cli articles list [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description | Default |
+|------|-------|-------------|---------|
+| `--limit` | `-l` | Maximum results | 50 |
+| `--output` | `-o` | Output format | table |
+
+### `zohodesk-cli articles get`
+
+Get article details.
+
+```bash
+zohodesk-cli articles get <article-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `article-id` | Article ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli articles search`
+
+Search knowledge base articles.
+
+```bash
+zohodesk-cli articles search <query> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `query` | Search query | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli articles create`
+
+Create a new article.
+
+```bash
+zohodesk-cli articles create [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description | Required |
+|------|-------|-------------|----------|
+| `--title` | `-t` | Article title | Yes |
+| `--content` | `-c` | Article content | Yes |
+| `--summary` | `-s` | Article summary | No |
+| `--category` | `-C` | Category ID | No |
+| `--output` | `-o` | Output format | No |
+
+### `zohodesk-cli articles update`
+
+Update an article.
+
+```bash
+zohodesk-cli articles update <article-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `article-id` | Article ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--title` | `-t` | Article title |
+| `--content` | `-c` | Article content |
+| `--summary` | `-s` | Article summary |
+| `--category` | `-C` | Category ID |
+| `--status` | `-S` | Article status |
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli articles delete`
+
+Delete an article.
+
+```bash
+zohodesk-cli articles delete <article-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `article-id` | Article ID | Yes |
+
+### `zohodesk-cli categories list`
+
+List knowledge base categories.
+
+```bash
+zohodesk-cli categories list [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli categories get`
+
+Get category details.
+
+```bash
+zohodesk-cli categories get <category-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `category-id` | Category ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
 ## Output Formats
 
 ### JSON

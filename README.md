@@ -16,6 +16,7 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Departments & Agents**: List and manage departments and agents
 - **Time tracking**: Log time on tickets and generate reports
 - **Attachments**: Upload, download, and manage file attachments
+- **Knowledge Base**: Manage articles and categories
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -254,6 +255,30 @@ zohodesk-cli attachments download <attachment-id> --output /path/to/save.pdf
 
 # Delete an attachment
 zohodesk-cli attachments delete <attachment-id>
+```
+
+## Knowledge Base
+
+Manage knowledge base articles and categories:
+
+```bash
+# List articles
+zohodesk-cli articles list
+
+# Search articles
+zohodesk-cli articles search "password reset"
+
+# Create article
+zohodesk-cli articles create --title "FAQ" --content "Common questions..."
+
+# Update article
+zohodesk-cli articles update <article-id> --status "Published"
+
+# List categories
+zohodesk-cli categories list
+
+# Get category
+zohodesk-cli categories get <category-id>
 ```
 
 ## For AI Agents

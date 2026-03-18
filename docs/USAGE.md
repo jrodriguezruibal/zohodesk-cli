@@ -287,6 +287,90 @@ zohodesk-cli attachments download 987654321 --output /path/to/save/file.pdf
 zohodesk-cli attachments delete 987654321
 ```
 
+## Knowledge Base
+
+### List Articles
+
+```bash
+# List all articles
+zohodesk-cli articles list
+
+# Limit results
+zohodesk-cli articles list --limit 20
+
+# JSON output
+zohodesk-cli articles list --output json
+```
+
+### Get Article
+
+```bash
+# Article details
+zohodesk-cli articles get 123456789
+
+# JSON output
+zohodesk-cli articles get 123456789 --output json
+```
+
+### Search Articles
+
+```bash
+# Search articles by keyword
+zohodesk-cli articles search "password reset"
+
+# JSON output
+zohodesk-cli articles search "password reset" --output json
+```
+
+### Create Article
+
+```bash
+# Create a new article
+zohodesk-cli articles create \
+  --title "How to reset password" \
+  --content "Step by step guide..." \
+  --summary "Password reset instructions" \
+  --category 123456789
+
+# JSON output
+zohodesk-cli articles create \
+  --title "FAQ" \
+  --content "Common questions..." \
+  --output json
+```
+
+### Update Article
+
+```bash
+# Update article
+zohodesk-cli articles update 123456789 \
+  --title "Updated title" \
+  --status "Published"
+
+# JSON output
+zohodesk-cli articles update 123456789 --status "Draft" --output json
+```
+
+### Delete Article
+
+```bash
+# Delete an article
+zohodesk-cli articles delete 123456789
+```
+
+### Categories
+
+```bash
+# List all categories
+zohodesk-cli categories list
+
+# Get category details
+zohodesk-cli categories get 123456789
+
+# JSON output
+zohodesk-cli categories list --output json
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets

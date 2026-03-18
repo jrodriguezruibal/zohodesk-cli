@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-03-18
+
+### Added
+- **Knowledge Base Commands**: Manage knowledge base articles and categories
+  - `articles list` - List all articles
+  - `articles get <id>` - Get article details
+  - `articles search <query>` - Search articles by keyword
+  - `articles create` - Create a new article
+  - `articles update <id>` - Update an article
+  - `articles delete <id>` - Delete an article
+  - `categories list` - List all categories
+  - `categories get <id>` - Get category details
+- New models: Article, ArticleCreateRequest, ArticleUpdateRequest, Category
+- New services: ArticlesService, CategoriesService
+- Output formatters for articles and categories
+
+### Changed
+- Updated documentation (USAGE.md, API.md, README.md)
+
 ## [0.4.0] - 2026-03-18
 
 ### Added

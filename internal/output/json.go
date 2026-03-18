@@ -199,6 +199,50 @@ func PrintAttachment(attachment *models.Attachment, format string) error {
 	}
 }
 
+func PrintArticles(articles []models.Article, format string) error {
+	switch format {
+	case "json":
+		return printJSON(articles)
+	case "yaml":
+		return printYAML(articles)
+	default:
+		return printArticlesTable(articles)
+	}
+}
+
+func PrintArticle(article *models.Article, format string) error {
+	switch format {
+	case "json":
+		return printJSON(article)
+	case "yaml":
+		return printYAML(article)
+	default:
+		return printArticleTable(article)
+	}
+}
+
+func PrintCategories(categories []models.Category, format string) error {
+	switch format {
+	case "json":
+		return printJSON(categories)
+	case "yaml":
+		return printYAML(categories)
+	default:
+		return printCategoriesTable(categories)
+	}
+}
+
+func PrintCategory(category *models.Category, format string) error {
+	switch format {
+	case "json":
+		return printJSON(category)
+	case "yaml":
+		return printYAML(category)
+	default:
+		return printCategoryTable(category)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")
