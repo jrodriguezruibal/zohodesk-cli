@@ -333,3 +333,121 @@ func printTicketContextTable(context *models.TicketContext) error {
 
 	return nil
 }
+
+func printTimeEntriesTable(entries []models.TimeEntry) error {
+	if len(entries) == 0 {
+		fmt.Println("No time entries found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Agent", "Duration", "Description", "Executed"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, e := range entries {
+		duration := formatDuration(e.Hours, e.Minutes)
+		description := e.Description
+		if len(description) > 30 {
+			description = description[:27] + "..."
+		}
+		executed := ""
+		if e.ExecutedTime != "" {
+			executed = e.ExecutedTime[:10]
+		} else if e.CreatedTime != "" {
+			executed = e.CreatedTime[:10]
+		}
+		table.Append([]string{
+			e.ID,
+			e.AgentName,
+			duration,
+			description,
+			executed,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d time entries\n", len(entries))
+	return nil
+}
+
+func printTimeEntryTable(entry *models.TimeEntry) error {
+	fmt.Printf("\nTime Entry: %s\n", entry.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Duration:    %s\n", formatDuration(entry.Hours, entry.Minutes))
+	fmt.Printf("Agent:       %s\n", entry.AgentName)
+	if entry.Description != "" {
+		fmt.Printf("Description: %s\n", entry.Description)
+	}
+	if entry.ExecutedTime != "" {
+		fmt.Printf("Executed:    %s\n", entry.ExecutedTime)
+	}
+	if entry.TicketID != "" {
+		fmt.Printf("Ticket ID:   %s\n", entry.TicketID)
+	}
+	fmt.Printf("Created:     %s\n", entry.CreatedTime)
+	return nil
+}
+
+func printTimeReportTable(report *models.TimeReport) error {
+	fmt.Println("\nTime Report Summary")
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Total Time:     %.1f hours\n", report.TotalHours)
+	fmt.Printf("Total Entries:  %d\n", report.EntriesCount)
+
+	if len(report.EntriesByAgent) > 0 {
+		fmt.Println("\nBy Agent:")
+		table := tablewriter.NewWriter(output)
+		table.SetHeader([]string{"Agent", "Hours", "Entries"})
+		table.SetBorder(false)
+		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+		table.SetAlignment(tablewriter.ALIGN_LEFT)
+		for _, a := range report.EntriesByAgent {
+			table.Append([]string{
+				a.AgentName,
+				fmt.Sprintf("%.1f", a.Hours),
+				fmt.Sprintf("%d", a.Count),
+			})
+		}
+		table.Render()
+	}
+
+	if len(report.EntriesByTicket) > 0 {
+		fmt.Println("\nBy Ticket:")
+		table := tablewriter.NewWriter(output)
+		table.SetHeader([]string{"Ticket", "Subject", "Hours", "Entries"})
+		table.SetBorder(false)
+		table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+		table.SetAlignment(tablewriter.ALIGN_LEFT)
+		for _, t := range report.EntriesByTicket {
+			subject := t.Subject
+			if len(subject) > 30 {
+				subject = subject[:27] + "..."
+			}
+			table.Append([]string{
+				t.TicketNumber,
+				subject,
+				fmt.Sprintf("%.1f", t.Hours),
+				fmt.Sprintf("%d", t.Count),
+			})
+		}
+		table.Render()
+	}
+
+	return nil
+}
+
+func formatDuration(hours, minutes int) string {
+	if hours > 0 && minutes > 0 {
+		return fmt.Sprintf("%dh %dm", hours, minutes)
+	} else if hours > 0 {
+		return fmt.Sprintf("%dh", hours)
+	} else if minutes > 0 {
+		return fmt.Sprintf("%dm", minutes)
+	}
+	return "0m"
+}

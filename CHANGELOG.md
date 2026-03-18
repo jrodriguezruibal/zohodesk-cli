@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-03-18
+
+### Added
+- **Time Tracking Commands**: Manage time entries on tickets
+  - `time list <ticket-id>` - List time entries for a ticket
+  - `time add <ticket-id>` - Add time entry with duration (e.g., 1h30m, 2h, 45m)
+  - `time delete <time-id>` - Delete a time entry
+  - `time report` - Generate time report with filters
+- Support for duration parsing (1h30m, 2h, 45m formats)
+- New models: TimeEntry, TimeEntryCreateRequest, TimeReport
+- New service: TimeService for time tracking API
+- Output formatters for time entries and reports
+
+### Changed
+- Updated documentation with time tracking examples
+- Added time tracking to feature list in README
+
 ## [0.2.2] - 2026-03-18
 
 ### Added

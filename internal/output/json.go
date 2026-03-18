@@ -144,6 +144,39 @@ func PrintTicketContext(context *models.TicketContext, format string) error {
 	}
 }
 
+func PrintTimeEntries(entries []models.TimeEntry, format string) error {
+	switch format {
+	case "json":
+		return printJSON(entries)
+	case "yaml":
+		return printYAML(entries)
+	default:
+		return printTimeEntriesTable(entries)
+	}
+}
+
+func PrintTimeEntry(entry *models.TimeEntry, format string) error {
+	switch format {
+	case "json":
+		return printJSON(entry)
+	case "yaml":
+		return printYAML(entry)
+	default:
+		return printTimeEntryTable(entry)
+	}
+}
+
+func PrintTimeReport(report *models.TimeReport, format string) error {
+	switch format {
+	case "json":
+		return printJSON(report)
+	case "yaml":
+		return printYAML(report)
+	default:
+		return printTimeReportTable(report)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

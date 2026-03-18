@@ -14,6 +14,7 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Ticket assignment**: Assign tickets to agents and departments
 - **Context enrichment**: Get tickets with full context (department, assignee, SLA)
 - **Departments & Agents**: List and manage departments and agents
+- **Time tracking**: Log time on tickets and generate reports
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -210,6 +211,30 @@ zohodesk-cli agents list
 
 # Get agent details
 zohodesk-cli agents get <agent-id>
+```
+
+## Time Tracking
+
+Log time spent on tickets:
+
+```bash
+# List time entries for a ticket
+zohodesk-cli time list <ticket-id>
+
+# Add time entry (1 hour 30 minutes)
+zohodesk-cli time add <ticket-id> --duration 1h30m --description "Investigating issue"
+
+# Add time for another agent
+zohodesk-cli time add <ticket-id> --duration 2h --agent <agent-id> --description "Code review"
+
+# View time report
+zohodesk-cli time report
+
+# Filter report by agent
+zohodesk-cli time report --agent <agent-id>
+
+# Filter by date range
+zohodesk-cli time report --from 2024-01-01 --to 2024-01-31
 ```
 
 ## For AI Agents

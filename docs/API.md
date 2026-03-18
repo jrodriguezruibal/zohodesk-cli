@@ -289,8 +289,85 @@ zohodesk-cli contacts search [flags]
 
 | Flag | Short | Description |
 |------|-------|-------------|
-| `--email` | `-e` | Search by email |
+--email` | `-e` | Search by email |
 | `--name` | `-n` | Search by name |
+| `--output` | `-o` | Output format |
+
+## Time Tracking Commands
+
+### `zohodesk-cli time list`
+
+List time entries for a ticket.
+
+```bash
+zohodesk-cli time list <ticket-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli time add`
+
+Add a time entry to a ticket.
+
+```bash
+zohodesk-cli time add <ticket-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description | Required |
+|------|-------|-------------|----------|
+| `--duration` | `-d` | Time duration (e.g., 1h30m, 2h, 45m) | Yes |
+| `--description` | `-D` | Description of work performed | No |
+| `--agent` | `-a` | Agent ID (default: current user) | No |
+| `--executed` | `-e` | Execution date (YYYY-MM-DD) | No |
+| `--output` | `-o` | Output format | No |
+
+### `zohodesk-cli time delete`
+
+Delete a time entry.
+
+```bash
+zohodesk-cli time delete <time-entry-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `time-entry-id` | Time Entry ID | Yes |
+
+### `zohodesk-cli time report`
+
+Generate a time report.
+
+```bash
+zohodesk-cli time report [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--agent` | `-a` | Filter by agent ID |
+| `--from` | `-f` | From date (YYYY-MM-DD) |
+| `--to` | `-t` | To date (YYYY-MM-DD) |
 | `--output` | `-o` | Output format |
 
 ## Output Formats

@@ -57,3 +57,7 @@ temp/
 .secrets/
 *.pem
 *.key
+
+# Project planning (local only)
+ROADMAP.md
+PROGRESS.md
