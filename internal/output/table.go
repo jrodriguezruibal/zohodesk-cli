@@ -617,3 +617,69 @@ func printCategoryTable(category *models.Category) error {
 	fmt.Printf("Created:  %s\n", category.CreatedTime)
 	return nil
 }
+
+func printTasksTable(tasks []models.Task) error {
+	if len(tasks) == 0 {
+		fmt.Println("No tasks found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Title", "Status", "Priority", "Owner", "Due"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, t := range tasks {
+		title := t.Title
+		if len(title) > 30 {
+			title = title[:27] + "..."
+		}
+		due := ""
+		if t.DueDate != "" {
+			due = t.DueDate[:10]
+		}
+		table.Append([]string{
+			t.ID,
+			title,
+			t.Status,
+			t.Priority,
+			t.OwnerName,
+			due,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d tasks\n", len(tasks))
+	return nil
+}
+
+func printTaskTable(task *models.Task) error {
+	fmt.Printf("\nTask: %s\n", task.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Title:    %s\n", task.Title)
+	fmt.Printf("Status:   %s\n", task.Status)
+	if task.Description != "" {
+		fmt.Printf("Description: %s\n", task.Description)
+	}
+	if task.Priority != "" {
+		fmt.Printf("Priority: %s\n", task.Priority)
+	}
+	if task.OwnerName != "" {
+		fmt.Printf("Owner:   %s\n", task.OwnerName)
+	}
+	if task.DueDate != "" {
+		fmt.Printf("Due:     %s\n", task.DueDate)
+	}
+	if task.TicketID != "" {
+		fmt.Printf("Ticket:  %s\n", task.TicketID)
+	}
+	fmt.Printf("Created: %s\n", task.CreatedTime)
+	if task.CompletedAt != "" {
+		fmt.Printf("Completed: %s\n", task.CompletedAt)
+	}
+	return nil
+}

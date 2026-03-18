@@ -595,6 +595,116 @@ zohodesk-cli categories get <category-id> [flags]
 |------|-------|-------------|
 | `--output` | `-o` | Output format |
 
+## Tasks Commands
+
+### `zohodesk-cli tasks list`
+
+List tasks.
+
+```bash
+zohodesk-cli tasks list [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--ticket` | `-t` | Filter by ticket ID |
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli tasks get`
+
+Get task details.
+
+```bash
+zohodesk-cli tasks get <task-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `task-id` | Task ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli tasks create`
+
+Create a new task.
+
+```bash
+zohodesk-cli tasks create [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description | Required |
+|------|-------|-------------|----------|
+| `--title` | `-t` | Task title | Yes |
+| `--description` | `-d` | Task description | No |
+| `--priority` | `-P` | Task priority | No |
+| `--owner` | `-o` | Owner ID | No |
+| `--due` | `-D` | Due date (YYYY-MM-DD) | No |
+| `--ticket` | `-T` | Associated ticket ID | No |
+
+### `zohodesk-cli tasks update`
+
+Update a task.
+
+```bash
+zohodesk-cli tasks update <task-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `task-id` | Task ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--title` | `-t` | Task title |
+| `--description` | `-d` | Task description |
+| `--priority` | `-P` | Task priority |
+| `--owner` | `-o` | Owner ID |
+| `--due` | `-D` | Due date (YYYY-MM-DD) |
+| `--status` | `-s` | Task status |
+| `--output` | | Output format |
+
+### `zohodesk-cli tasks complete`
+
+Mark a task as completed.
+
+```bash
+zohodesk-cli tasks complete <task-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `task-id` | Task ID | Yes |
+
+### `zohodesk-cli tasks delete`
+
+Delete a task.
+
+```bash
+zohodesk-cli tasks delete <task-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `task-id` | Task ID | Yes |
+
 ## Output Formats
 
 ### JSON

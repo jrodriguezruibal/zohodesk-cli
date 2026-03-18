@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0] - 2026-03-18
+
+### Added
+- **Tasks Commands**: Manage tasks associated with tickets
+  - `tasks list` - List all tasks or filter by ticket
+  - `tasks get <id>` - Get task details
+  - `tasks create` - Create a new task
+  - `tasks update <id>` - Update task details
+  - `tasks complete <id>` - Mark task as completed
+  - `tasks delete <id>` - Delete a task
+- New models: Task, TaskCreateRequest, TaskUpdateRequest
+- New service: TasksService
+- Output formatters for tasks
+
+### Changed
+- Updated documentation (USAGE.md, API.md, README.md)
+
 ## [0.5.0] - 2026-03-18
 
 ### Added

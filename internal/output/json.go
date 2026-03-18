@@ -243,6 +243,28 @@ func PrintCategory(category *models.Category, format string) error {
 	}
 }
 
+func PrintTasks(tasks []models.Task, format string) error {
+	switch format {
+	case "json":
+		return printJSON(tasks)
+	case "yaml":
+		return printYAML(tasks)
+	default:
+		return printTasksTable(tasks)
+	}
+}
+
+func PrintTask(task *models.Task, format string) error {
+	switch format {
+	case "json":
+		return printJSON(task)
+	case "yaml":
+		return printYAML(task)
+	default:
+		return printTaskTable(task)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

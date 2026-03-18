@@ -371,6 +371,76 @@ zohodesk-cli categories get 123456789
 zohodesk-cli categories list --output json
 ```
 
+## Tasks
+
+### List Tasks
+
+```bash
+# List all tasks
+zohodesk-cli tasks list
+
+# List tasks for a specific ticket
+zohodesk-cli tasks list --ticket 123456789
+
+# JSON output
+zohodesk-cli tasks list --output json
+```
+
+### Get Task
+
+```bash
+# Task details
+zohodesk-cli tasks get 123456789
+
+# JSON output
+zohodesk-cli tasks get 123456789 --output json
+```
+
+### Create Task
+
+```bash
+# Create a task
+zohodesk-cli tasks create --title "Review code changes" --description "Review PR #42"
+
+# Create task with due date and priority
+zohodesk-cli tasks create \
+  --title "Complete feature" \
+  --priority "High" \
+  --due 2024-01-15
+
+# Create task for a ticket
+zohodesk-cli tasks create \
+  --title "Follow up with customer" \
+  --ticket 123456789
+
+# JSON output
+zohodesk-cli tasks create --title "New task" --output json
+```
+
+### Update Task
+
+```bash
+# Update task
+zohodesk-cli tasks update 123456789 --status "In Progress" --priority "High"
+
+# JSON output
+zohodesk-cli tasks update 123456789 --title "Updated title" --output json
+```
+
+### Complete Task
+
+```bash
+# Mark task as completed
+zohodesk-cli tasks complete 123456789
+```
+
+### Delete Task
+
+```bash
+# Delete a task
+zohodesk-cli tasks delete 123456789
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets
