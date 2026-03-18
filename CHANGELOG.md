@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-03-18
+
+### Added
+- **Attachments Commands**: Manage file attachments on tickets
+  - `attachments list <ticket-id>` - List attachments for a ticket
+  - `attachments upload <ticket-id> <file>` - Upload a file attachment
+  - `attachments download <attachment-id>` - Download an attachment
+  - `attachments delete <attachment-id>` - Delete an attachment
+- Multipart file upload support in API client
+- File size formatting in output (KB, MB, GB)
+- Update documentation (USAGE.md, API.md, README.md)
+
+### Changed
+- Extended Attachment model with DownloadURL field
+
 ## [0.3.0] - 2026-03-18
 
 ### Added

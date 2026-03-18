@@ -451,3 +451,63 @@ func formatDuration(hours, minutes int) string {
 	}
 	return "0m"
 }
+
+func printAttachmentsTable(attachments []models.Attachment) error {
+	if len(attachments) == 0 {
+		fmt.Println("No attachments found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Size", "Type"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, a := range attachments {
+		size := formatSize(a.Size)
+		table.Append([]string{
+			a.ID,
+			a.Name,
+			size,
+			a.ContentType,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d attachments\n", len(attachments))
+	return nil
+}
+
+func printAttachmentTable(attachment *models.Attachment) error {
+	fmt.Printf("\nAttachment: %s\n", attachment.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:  %s\n", attachment.Name)
+	fmt.Printf("Size:  %s\n", formatSize(attachment.Size))
+	fmt.Printf("Type:  %s\n", attachment.ContentType)
+	if attachment.DownloadURL != "" {
+		fmt.Printf("URL:   %s\n", attachment.DownloadURL)
+	}
+	return nil
+}
+
+func formatSize(bytes int64) string {
+	const (
+		KB = 1024
+		MB = KB * 1024
+		GB = MB * 1024
+	)
+	switch {
+	case bytes >= GB:
+		return fmt.Sprintf("%.1f GB", float64(bytes)/float64(GB))
+	case bytes >= MB:
+		return fmt.Sprintf("%.1f MB", float64(bytes)/float64(MB))
+	case bytes >= KB:
+		return fmt.Sprintf("%.1f KB", float64(bytes)/float64(KB))
+	default:
+		return fmt.Sprintf("%d B", bytes)
+	}
+}

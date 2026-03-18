@@ -195,3 +195,27 @@ func (c *Client) Delete(ctx context.Context, endpoint string) error {
 func (c *Client) GetRaw(ctx context.Context, endpoint string) (*http.Response, error) {
 	return c.doRequest(ctx, http.MethodGet, endpoint, nil, nil)
 }
+
+func (c *Client) doMultipartRequest(ctx context.Context, endpoint string, body io.Reader, contentType string) (*http.Response, error) {
+	if err := c.ensureToken(ctx); err != nil {
+		return nil, err
+	}
+
+	baseURL, ok := config.RegionURLs[c.config.Region]
+	if !ok {
+		baseURL = config.RegionURLs["com"]
+	}
+
+	fullURL := baseURL + "/api/v1" + endpoint
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fullURL, body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	req.Header.Set("Authorization", "Zoho-oauthtoken "+c.tokenCache.AccessToken)
+	req.Header.Set("orgId", c.config.OrgID)
+	req.Header.Set("Content-Type", contentType)
+
+	return c.httpClient.Do(req)
+}

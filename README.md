@@ -15,6 +15,7 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Context enrichment**: Get tickets with full context (department, assignee, SLA)
 - **Departments & Agents**: List and manage departments and agents
 - **Time tracking**: Log time on tickets and generate reports
+- **Attachments**: Upload, download, and manage file attachments
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -235,6 +236,24 @@ zohodesk-cli time report --agent <agent-id>
 
 # Filter by date range
 zohodesk-cli time report --from 2024-01-01 --to 2024-01-31
+```
+
+## Attachments
+
+Manage file attachments on tickets:
+
+```bash
+# List attachments for a ticket
+zohodesk-cli attachments list <ticket-id>
+
+# Upload a file
+zohodesk-cli attachments upload <ticket-id> /path/to/file.pdf
+
+# Download an attachment
+zohodesk-cli attachments download <attachment-id> --output /path/to/save.pdf
+
+# Delete an attachment
+zohodesk-cli attachments delete <attachment-id>
 ```
 
 ## For AI Agents

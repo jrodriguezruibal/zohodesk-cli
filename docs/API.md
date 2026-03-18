@@ -370,6 +370,83 @@ zohodesk-cli time report [flags]
 | `--to` | `-t` | To date (YYYY-MM-DD) |
 | `--output` | `-o` | Output format |
 
+## Attachments Commands
+
+### `zohodesk-cli attachments list`
+
+List attachments for a ticket.
+
+```bash
+zohodesk-cli attachments list <ticket-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli attachments upload`
+
+Upload a file attachment to a ticket.
+
+```bash
+zohodesk-cli attachments upload <ticket-id> <file> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+| `file` | Path to file | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli attachments download`
+
+Download an attachment.
+
+```bash
+zohodesk-cli attachments download <attachment-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `attachment-id` | Attachment ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output file path |
+
+### `zohodesk-cli attachments delete`
+
+Delete an attachment.
+
+```bash
+zohodesk-cli attachments delete <attachment-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `attachment-id` | Attachment ID | Yes |
+
 ## Output Formats
 
 ### JSON

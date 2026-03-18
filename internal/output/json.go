@@ -177,6 +177,28 @@ func PrintTimeReport(report *models.TimeReport, format string) error {
 	}
 }
 
+func PrintAttachments(attachments []models.Attachment, format string) error {
+	switch format {
+	case "json":
+		return printJSON(attachments)
+	case "yaml":
+		return printYAML(attachments)
+	default:
+		return printAttachmentsTable(attachments)
+	}
+}
+
+func PrintAttachment(attachment *models.Attachment, format string) error {
+	switch format {
+	case "json":
+		return printJSON(attachment)
+	case "yaml":
+		return printYAML(attachment)
+	default:
+		return printAttachmentTable(attachment)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

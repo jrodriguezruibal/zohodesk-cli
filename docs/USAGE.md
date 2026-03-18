@@ -248,6 +248,45 @@ zohodesk-cli time report --from 2024-01-01 --to 2024-01-31
 zohodesk-cli time report --output json
 ```
 
+## Attachments
+
+### List Attachments
+
+```bash
+# List all attachments for a ticket
+zohodesk-cli attachments list 123456789
+
+# JSON output
+zohodesk-cli attachments list 123456789 --output json
+```
+
+### Upload Attachment
+
+```bash
+# Upload a file to a ticket
+zohodesk-cli attachments upload 123456789 /path/to/file.pdf
+
+# JSON output
+zohodesk-cli attachments upload 123456789 /path/to/file.pdf --output json
+```
+
+### Download Attachment
+
+```bash
+# Download attachment to current directory
+zohodesk-cli attachments download 987654321
+
+# Download to specific path
+zohodesk-cli attachments download 987654321 --output /path/to/save/file.pdf
+```
+
+### Delete Attachment
+
+```bash
+# Delete an attachment
+zohodesk-cli attachments delete 987654321
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets
