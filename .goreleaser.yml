@@ -1,0 +1,115 @@
+project_name: zohodesk-cli
+
+before:
+  hooks:
+    - go mod tidy
+    - go generate ./...
+
+builds:
+  -
+    id: zohodesk-cli
+    main: ./main.go
+    binary: zohodesk-cli
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.buildTime={{.Date}}
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+archives:
+  -
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - README.md
+      - LICENSE
+      - docs/*
+
+checksum:
+  name_template: 'checksums.txt'
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
+
+brews:
+  -
+    name: zohodesk-cli
+    tap:
+      owner: jrodriguezruibal
+      name: homebrew-tap
+      branch: main
+    folder: Formula
+    homepage: https://github.com/jrodriguezruibal/zohodesk-cli
+    description: CLI for Zoho Desk API
+    license: MIT
+    test: |
+      system "#{bin}/zohodesk-cli", "version"
+
+dockers:
+  -
+    image_templates:
+      - "ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64"
+      - "ghcr.io/jrodriguezruibal/zohodesk-cli:latest-amd64"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source=https://github.com/jrodriguezruibal/zohodesk-cli"
+  -
+    image_templates:
+      - "ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-arm64"
+      - "ghcr.io/jrodriguezruibal/zohodesk-cli:latest-arm64"
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source=https://github.com/jrodriguezruibal/zohodesk-cli"
+
+docker_manifests:
+  -
+    name_template: ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}
+    image_templates:
+      - ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64
+      - ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-arm64
+  -
+    name_template: ghcr.io/jrodriguezruibal/zohodesk-cli:latest
+    image_templates:
+      - ghcr.io/jrodriguezruibal/zohodesk-cli:latest-amd64
+      - ghcr.io/jrodriguezruibal/zohodesk-cli:latest-arm64
+
+nfpms:
+  -
+    id: packages
+    builds:
+      - zohodesk-cli
+    formats:
+      - deb
+      - rpm
+    maintainer: Jose Rodriguez <jrodriguezruibal@gmail.com>
+    description: CLI for Zoho Desk API
+    license: MIT
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    homepage: https://github.com/jrodriguezruibal/zohodesk-cli

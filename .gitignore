@@ -1,0 +1,59 @@
+# Binaries
+zohodesk-cli
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Go workspace file
+go.work
+
+# Dependency directories
+vendor/
+
+# Config files (NEVER COMMIT THESE)
+*.env
+.env*
+config.yaml
+config.local.yaml
+credentials.yaml
+*.json
+!go.sum
+
+# Token cache
+.cache/
+tokens/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+
+# Release
+.release/
+
+# Temporary files
+tmp/
+temp/
+
+# Secrets (NEVER COMMIT)
+.secrets/
+*.pem
+*.key
