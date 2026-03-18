@@ -66,40 +66,6 @@ brews:
     test: |
       system "#{bin}/zohodesk-cli", "version"
 
-dockers:
-  -
-    image_templates:
-      - "ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64"
-      - "ghcr.io/jrodriguezruibal/zohodesk-cli:latest-amd64"
-    use: buildx
-    build_flag_templates:
-      - "--platform=linux/amd64"
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - "--label=org.opencontainers.image.source=https://github.com/jrodriguezruibal/zohodesk-cli"
-  -
-    image_templates:
-      - "ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-arm64"
-      - "ghcr.io/jrodriguezruibal/zohodesk-cli:latest-arm64"
-    use: buildx
-    build_flag_templates:
-      - "--platform=linux/arm64"
-      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
-      - "--label=org.opencontainers.image.version={{ .Version }}"
-      - "--label=org.opencontainers.image.source=https://github.com/jrodriguezruibal/zohodesk-cli"
-
-docker_manifests:
-  -
-    name_template: ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}
-    image_templates:
-      - ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64
-      - ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-arm64
-  -
-    name_template: ghcr.io/jrodriguezruibal/zohodesk-cli:latest
-    image_templates:
-      - ghcr.io/jrodriguezruibal/zohodesk-cli:latest-amd64
-      - ghcr.io/jrodriguezruibal/zohodesk-cli:latest-arm64
-
 nfpms:
   -
     id: packages
@@ -113,3 +79,17 @@ nfpms:
     license: MIT
     file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     homepage: https://github.com/jrodriguezruibal/zohodesk-cli
+
+# Docker support disabled for now due to multi-arch build issues
+# Will be enabled in a future release with proper multi-arch support
+# dockers:
+#   - image_templates:
+#       - "ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64"
+#     use: buildx
+#     build_flag_templates:
+#       - "--platform=linux/amd64"
+# 
+# docker_manifests:
+#   - name_template: ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}
+#     image_templates:
+#       - ghcr.io/jrodriguezruibal/zohodesk-cli:{{ .Version }}-amd64
