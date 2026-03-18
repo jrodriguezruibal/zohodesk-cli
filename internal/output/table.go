@@ -151,3 +151,60 @@ func printContactTable(contact *models.Contact) error {
 	fmt.Printf("Created:    %s\n", contact.CreatedTime)
 	return nil
 }
+
+func printCommentsTable(comments []models.Comment) error {
+	if len(comments) == 0 {
+		fmt.Println("No comments found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Author", "Type", "Created", "Preview"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, c := range comments {
+		preview := c.Content
+		if len(preview) > 40 {
+			preview = preview[:37] + "..."
+		}
+		commentType := "Private"
+		if c.IsPublic {
+			commentType = "Public"
+		}
+		table.Append([]string{
+			c.ID,
+			c.AuthorName,
+			commentType,
+			c.CreatedTime[:10],
+			preview,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d comments\n", len(comments))
+	return nil
+}
+
+func printCommentTable(comment *models.Comment) error {
+	fmt.Printf("\nComment: %s\n", comment.ID)
+	fmt.Println("─────────────────────────────────────")
+	commentType := "Private"
+	if comment.IsPublic {
+		commentType = "Public"
+	}
+	fmt.Printf("Type:       %s\n", commentType)
+	fmt.Printf("Author:     %s\n", comment.AuthorName)
+	fmt.Printf("Created:    %s\n", comment.CreatedTime)
+	fmt.Println("\nContent:")
+	fmt.Println(comment.Content)
+	return nil
+}
+
+func printBatchResultJSON(result *models.BatchResponse) error {
+	return printJSON(result)
+}

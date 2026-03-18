@@ -63,6 +63,32 @@ func PrintContact(contact *models.Contact, format string) error {
 	}
 }
 
+func PrintComments(comments []models.Comment, format string) error {
+	switch format {
+	case "json":
+		return printJSON(comments)
+	case "yaml":
+		return printYAML(comments)
+	default:
+		return printCommentsTable(comments)
+	}
+}
+
+func PrintComment(comment *models.Comment, format string) error {
+	switch format {
+	case "json":
+		return printJSON(comment)
+	case "yaml":
+		return printYAML(comment)
+	default:
+		return printCommentTable(comment)
+	}
+}
+
+func PrintJSON(v interface{}) error {
+	return printJSON(v)
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

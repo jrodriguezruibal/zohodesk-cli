@@ -9,7 +9,9 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **TUI setup**: Interactive configuration wizard
 - **Agent-friendly**: Designed for use by AI agents (Claude, GPT, etc.)
 - **Self-Client OAuth**: No browser interaction required
-- **Batch operations**: Accept JSON input via stdin for bulk operations
+- **Batch operations**: Create, update, or close multiple tickets from JSON input
+- **Comments/Replies**: Add public replies and private notes to tickets
+- **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
 
@@ -48,17 +50,6 @@ brew install zohodesk-cli
 go install github.com/jrodriguezruibal/zohodesk-cli@latest
 ```
 
-### Docker
-
-```bash
-docker pull ghcr.io/jrodriguezruibal/zohodesk-cli:latest
-
-# Run with mounted config
-docker run --rm \
-  -v ~/.config/zohodesk-cli:/root/.config/zohodesk-cli \
-  ghcr.io/jrodriguezruibal/zohodesk-cli:latest tickets list
-```
-
 ## Quick Start
 
 ### 1. Get Zoho API Credentials
@@ -81,7 +72,7 @@ export ZOHO_ORG_ID="12345678"
 export ZOHO_REGION="com"  # Optional: com, eu, in, cn, au
 ```
 
-###3. Use the CLI
+### 3. Use the CLI
 
 ```bash
 # List tickets
@@ -113,6 +104,62 @@ zohodesk-cli tickets list --output json
 - [Configuration Guide](./docs/CONFIGURATION.md) - Configuration and profiles
 - [Usage Examples](./docs/USAGE.md) - Common usage patterns
 - [API Reference](./docs/API.md) - Complete command reference
+
+## Batch Operations
+
+Create, update, or close multiple tickets from JSON input:
+
+```bash
+# Create multiple tickets from JSON
+cat tickets.json | zohodesk-cli tickets create --batch
+
+# Create from file
+zohodesk-cli tickets create --batch --file tickets.json
+
+# Update multiple tickets
+cat updates.json | zohodesk-cli tickets update --batch
+
+# Close multiple tickets
+echo '["123", "456", "789"]' | zohodesk-cli tickets close --batch
+```
+
+### Batch JSON Format
+
+**Create tickets:**
+```json
+[
+  {"subject": "Ticket 1", "email": "user1@example.com", "priority": "High"},
+  {"subject": "Ticket 2", "email": "user2@example.com", "priority": "Medium"}
+]
+```
+
+**Update tickets:**
+```json
+[
+  {"id": "123", "status": "Closed"},
+  {"id": "456", "priority": "High"}
+]
+```
+
+**Close tickets:**
+```json
+["123", "456", "789"]
+```
+
+## Comments and Replies
+
+Add public replies or private notes to tickets:
+
+```bash
+# List comments on a ticket
+zohodesk-cli comments list <ticket-id>
+
+# Add a public reply
+zohodesk-cli comments reply <ticket-id> --message "Thank you for your report"
+
+# Add a private note
+zohodesk-cli comments note <ticket-id> --message "Internal note for the team"
+```
 
 ## For AI Agents
 

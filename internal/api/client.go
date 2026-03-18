@@ -185,9 +185,13 @@ func (c *Client) Delete(ctx context.Context, endpoint string) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >=400 {
+	if resp.StatusCode >= 400 {
 		return fmt.Errorf("delete failed with status %d", resp.StatusCode)
 	}
 
 	return nil
+}
+
+func (c *Client) GetRaw(ctx context.Context, endpoint string) (*http.Response, error) {
+	return c.doRequest(ctx, http.MethodGet, endpoint, nil, nil)
 }

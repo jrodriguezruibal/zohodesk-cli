@@ -74,14 +74,6 @@ zohodesk-cli tickets create \
   --email admin@example.com \
   --priority High
 
-# With department
-zohodesk-cli tickets create \
-  --subject "Question" \
-  --description "How do I...?" \
-  --email user@example.com \
-  --department "123456789" \
-  --priority Low
-
 # JSON output
 zohodesk-cli tickets create \
   --subject "Issue" \
@@ -93,7 +85,7 @@ zohodesk-cli tickets create \
 
 ```bash
 # Change status
-zohodesk-cli update 123456789 --status Closed
+zohodesk-cli tickets update 123456789 --status Closed
 zohodesk-cli tickets update 123456789 --status "On Hold"
 
 # Change priority
@@ -103,11 +95,6 @@ zohodesk-cli tickets update 123456789 --priority High
 zohodesk-cli tickets update 123456789 \
   --status "On Hold" \
   --priority High
-
-# With resolution
-zohodesk-cli tickets update 123456789 \
-  --status Closed \
-  --resolution "Issue resolved by clearing cache"
 ```
 
 ### Close Ticket
@@ -118,7 +105,7 @@ zohodesk-cli tickets close 123456789
 
 # Close with resolution
 zohodesk-cli tickets close 123456789 \
-  --resolution "Fixed by restarting server"
+  --resolution "Issue resolved by clearing cache"
 ```
 
 ### Search Tickets
@@ -137,6 +124,112 @@ zohodesk-cli tickets search \
 
 # JSON output
 zohodesk-cli tickets search --email user@example.com --output json
+```
+
+## Batch Operations
+
+### Create Multiple Tickets
+
+```bash
+# From stdin
+cat tickets.json | zohodesk-cli tickets create --batch
+
+# From file
+zohodesk-cli tickets create --batch --file tickets.json
+```
+
+**JSON format:**
+```json
+[
+  {"subject": "Ticket 1", "email": "user1@example.com", "priority": "High"},
+  {"subject": "Ticket 2", "email": "user2@example.com", "priority": "Medium"}
+]
+```
+
+### Update Multiple Tickets
+
+```bash
+# From stdin
+cat updates.json | zohodesk-cli tickets update --batch
+
+# From file
+zohodesk-cli tickets update --batch --file updates.json
+```
+
+**JSON format:**
+```json
+[
+  {"id": "123", "status": "Closed"},
+  {"id": "456", "status": "On Hold", "priority": "High"}
+]
+```
+
+### Close Multiple Tickets
+
+```bash
+# From stdin
+echo '["123", "456", "789"]' | zohodesk-cli tickets close --batch
+
+# From file
+zohodesk-cli tickets close --batch --file ticket_ids.json
+```
+
+**JSON format:**
+```json
+["123456789", "987654321", "111222333"]
+```
+
+### Batch Output
+
+```json
+{
+  "total": 3,
+  "succeeded": 2,
+  "failed": 1,
+  "results": [
+    {"index": 0, "status": "success", "data": {...}},
+    {"index": 1, "status": "success", "data": {...}},
+    {"index": 2, "status": "failed", "error": "API error: ..."}
+  ]
+}
+```
+
+## Comments
+
+### List Comments
+
+```bash
+# List all comments on a ticket
+zohodesk-cli comments list 123456789
+
+# JSON output
+zohodesk-cli comments list 123456789 --output json
+```
+
+### Add Public Reply
+
+```bash
+# Add a public reply (customer can see)
+zohodesk-cli comments reply 123456789 \
+  --message "Thank you for your report. We are investigating."
+
+# JSON output
+zohodesk-cli comments reply 123456789 \
+  --message "Your ticket is being processed." \
+  --output json
+```
+
+### Add Private Note
+
+```bash
+# Add a private note (only agents can see)
+zohodesk-cli comments note 123456789 \
+  --message "Customer mentioned they tried clearing cache"
+
+# JSON output
+zohodesk-cli comments note 123456789 \
+  --message "Internal note here" \
+  --output json
 ```
 
 ## Contacts
@@ -239,6 +332,9 @@ All commands support JSON output for easy parsing:
 zohodesk-cli tickets list --output json
 zohodesk-cli tickets get 123456789 --output json
 
+# Comments
+zohodesk-cli comments list 123456789 --output json
+
 # Contacts
 zohodesk-cli contacts list --output json
 zohodesk-cli contacts search --email user@example.com --output json
@@ -280,6 +376,22 @@ zohodesk-cli contacts search --email user@example.com --output json
 }
 ```
 
+#### Comments List
+
+```json
+[
+  {
+    "id": "987654321",
+    "ticketId": "123456789",
+    "content": "Thank you for your report.",
+    "authorName": "Agent Smith",
+    "authorEmail": "agent@example.com",
+    "isPublic": true,
+    "createdTime": "2024-01-15T14:30:00Z"
+  }
+]
+```
+
 ### Scripting Examples
 
 ```bash
@@ -302,21 +414,11 @@ zohodesk-cli tickets create \
   --output json
 ```
 
-## Batch Operations (stdin)
-
-```bash
-# Create multiple tickets from JSON
-cat tickets.json | zohodesk-cli tickets create --batch
-
-# Update multiple tickets
-cat updates.json | zohodesk-cli tickets update --batch
-```
-
 ## Exit Codes
 
 | Code | Meaning |
 |------|---------|
-|0 | Success |
-|1 | General error |
-|2 | Configuration error |
-|3 | API error |
+| 0 | Success |
+| 1 | General error |
+| 2 | Configuration error |
+| 3 | API error |

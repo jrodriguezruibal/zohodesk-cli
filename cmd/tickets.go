@@ -35,23 +35,23 @@ var ticketsGetCmd = &cobra.Command{
 var ticketsCreateCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new ticket",
-	Long:  `Create a new ticket in Zoho Desk.`,
+	Long:  `Create a new ticket in Zoho Desk. Use --batch to create multiple tickets from JSON input.`,
 	RunE:  runTicketsCreate,
 }
 
 var ticketsUpdateCmd = &cobra.Command{
 	Use:   "update <ticket-id>",
 	Short: "Update a ticket",
-	Long:  `Update ticket status, priority, or other fields.`,
-	Args:  cobra.ExactArgs(1),
+	Long:  `Update ticket status, priority, or other fields. Use --batch to update multiple tickets from JSON input.`,
+	Args:  cobra.MaximumNArgs(1),
 	RunE:  runTicketsUpdate,
 }
 
 var ticketsCloseCmd = &cobra.Command{
 	Use:   "close <ticket-id>",
 	Short: "Close a ticket",
-	Long:  `Close a ticket with an optional resolution message.`,
-	Args:  cobra.ExactArgs(1),
+	Long:  `Close a ticket with an optional resolution message. Use --batch to close multiple tickets from JSON input.`,
+	Args:  cobra.MaximumNArgs(1),
 	RunE:  runTicketsClose,
 }
 
@@ -63,18 +63,20 @@ var ticketsSearchCmd = &cobra.Command{
 }
 
 var (
-	flagStatus     string
-	flagPriority   string
-	flagLimit      int
-	flagSubject    string
+	flagStatus      string
+	flagPriority    string
+	flagLimit       int
+	flagSubject     string
 	flagDescription string
-	flagEmail      string
-	flagDepartment string
-	flagResolution string
-	flagFull       bool
-	flagQuery      string
-	flagFromDate   string
-	flagToDate     string
+	flagEmail       string
+	flagDepartment  string
+	flagResolution  string
+	flagFull        bool
+	flagQuery       string
+	flagFromDate    string
+	flagToDate      string
+	flagBatch       bool
+	flagBatchFile   string
 )
 
 func init() {
@@ -98,14 +100,18 @@ func init() {
 	ticketsCreateCmd.Flags().StringVarP(&flagPriority, "priority", "P", "Medium", "ticket priority (Low, Medium, High)")
 	ticketsCreateCmd.Flags().StringVarP(&flagDepartment, "department", "D", "", "department ID")
 	ticketsCreateCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
-	ticketsCreateCmd.MarkFlagRequired("subject")
-	ticketsCreateCmd.MarkFlagRequired("email")
+	ticketsCreateCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
+	ticketsCreateCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
 
 	ticketsUpdateCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "new status")
 	ticketsUpdateCmd.Flags().StringVarP(&flagPriority, "priority", "P", "", "new priority")
 	ticketsUpdateCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
+	ticketsUpdateCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
+	ticketsUpdateCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
 
 	ticketsCloseCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
+	ticketsCloseCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
+	ticketsCloseCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
 
 	ticketsSearchCmd.Flags().StringVarP(&flagEmail, "email", "e", "", "search by contact email")
 	ticketsSearchCmd.Flags().StringVarP(&flagQuery, "query", "q", "", "search by keyword")
@@ -197,6 +203,10 @@ func runTicketsGet(cmd *cobra.Command, args []string) error {
 }
 
 func runTicketsCreate(cmd *cobra.Command, args []string) error {
+	if flagBatch || flagBatchFile != "" {
+		return runBatchCreate()
+	}
+
 	client, _, err := newClient()
 	if err != nil {
 		return err
@@ -222,6 +232,14 @@ func runTicketsCreate(cmd *cobra.Command, args []string) error {
 }
 
 func runTicketsUpdate(cmd *cobra.Command, args []string) error {
+	if flagBatch || flagBatchFile != "" {
+		return runBatchUpdate()
+	}
+
+	if len(args) == 0 {
+		return fmt.Errorf("ticket-id is required when not using --batch")
+	}
+
 	client, _, err := newClient()
 	if err != nil {
 		return err
@@ -250,6 +268,14 @@ func runTicketsUpdate(cmd *cobra.Command, args []string) error {
 }
 
 func runTicketsClose(cmd *cobra.Command, args []string) error {
+	if flagBatch || flagBatchFile != "" {
+		return runBatchClose()
+	}
+
+	if len(args) == 0 {
+		return fmt.Errorf("ticket-id is required when not using --batch")
+	}
+
 	client, _, err := newClient()
 	if err != nil {
 		return err
