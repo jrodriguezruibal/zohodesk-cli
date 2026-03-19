@@ -1,273 +1,152 @@
 # zohodesk-cli
 
-A command-line interface for Zoho Desk API, designed for both human interaction and AI agent integration.
+A powerful command-line interface for Zoho Desk API, designed for both human interaction and AI agent integration.
 
-## Features
+## Overview
 
-- **Multiple profiles**: Manage multiple Zoho Desk organizations
-- **Multiple output formats**: JSON, YAML, and human-readable tables
-- **TUI setup**: Interactive configuration wizard
-- **Agent-friendly**: Designed for use by AI agents (Claude, GPT, etc.)
-- **Self-Client OAuth**: One-time setup with automatic token refresh
-- **Batch operations**: Create, update, or close multiple tickets from JSON input
-- **Comments/Replies**: Add public replies and private notes to tickets
-- **Ticket assignment**: Assign tickets to agents and departments
-- **Context enrichment**: Get tickets with full context (department, assignee, SLA)
-- **Departments & Agents**: List and manage departments and agents
-- **Attachments**: Upload, download, and manage file attachments
-- **Knowledge Base**: Manage articles (categories endpoint not available)
-- **Tasks**: Manage tasks with due dates, priorities, and statuses
-- **Products & Accounts**: Manage products and customer accounts
-- **Tags**: Manage ticket tags
-- **Rate limiting**: Built-in rate limiting for batch operations
+zohodesk-cli provides complete access to Zoho Desk's API through an intuitive command-line interface. Whether you're a support agent managing tickets, a developer automating workflows, or an AI agent integrating with Zoho Desk, this tool makes it simple.
+
+**Key Features:**
+- 🔐 **Simple Authentication** - One-time OAuth setup with automatic token refresh
+- 📋 **Full Ticket Management** - Create, update, close, merge, assign tickets
+- 💬 **Comments & Threads** - Add replies and private notes to tickets
+- 🏷️ **Tags** - Organize tickets with custom tags
+- 👥 **Contacts & Agents** - Manage contacts and support agents
+- 📁 **Attachments** - Upload and download files
+- 📝 **Knowledge Base** - Manage articles
+- ✅ **Tasks** - Task management with priorities and due dates
+- 🔄 **Batch Operations** - Process multiple tickets at once
+- 📊 **Multiple Output Formats** - Human-readable tables, JSON, YAML
 
 ## Installation
 
-### Binary Download (Recommended)
+### Download Binary (Recommended)
 
-Download the latest release from [GitHub Releases](https://github.com/jrodriguezruibal/zohodesk-cli/releases):
+Download the latest release for your platform from [GitHub Releases](https://github.com/jrodriguezruibal/zohodesk-cli/releases):
 
 ```bash
-# Linux (amd64)
-curl -sL https://github.com/jrodriguezruibal/zohodesk-cli/releases/latest/download/zohodesk-cli-linux-amd64.tar.gz | tar xz
+# Extract and install
+tar xzf zohodesk-cli-*.tar.gz
 sudo mv zohodesk-cli /usr/local/bin/
 
-# Linux (arm64)
-curl -sL https://github.com/jrodriguezruibal/zohodesk-cli/releases/latest/download/zohodesk-cli-linux-arm64.tar.gz | tar xz
-sudo mv zohodesk-cli /usr/local/bin/
-
-# macOS (Apple Silicon)
-curl -sL https://github.com/jrodriguezruibal/zohodesk-cli/releases/latest/download/zohodesk-cli-darwin-arm64.tar.gz | tar xz
-sudo mv zohodesk-cli /usr/local/bin/
-
-# macOS (Intel)
-curl -sL https://github.com/jrodriguezruibal/zohodesk-cli/releases/latest/download/zohodesk-cli-darwin-amd64.tar.gz | tar xz
-sudo mv zohodesk-cli /usr/local/bin/
+# Verify installation
+zohodesk-cli version
 ```
 
-### Homebrew
+### Build from Source
 
 ```bash
-brew tap jrodriguezruibal/tap
-brew install zohodesk-cli
-```
-
-### Go Install
-
-```bash
-go install github.com/jrodriguezruibal/zohodesk-cli@latest
+git clone https://github.com/jrodriguezruibal/zohodesk-cli.git
+cd zohodesk-cli
+go build -o zohodesk-cli .
 ```
 
 ## Quick Start
 
-### 1. Get Zoho API Credentials
-
-1. Go to [Zoho API Console](https://api-console.zoho.com)
-2. Create a new client with type **Self-Client**
-3. Note your **Client ID** and **Client Secret**
-4. Get your **Organization ID** from Zoho Desk Settings → Company → Organization
-
-### 2. Initialize Configuration
-
-```bash
-# Interactive setup (recommended)
-zohodesk-cli config init
-```
-
-### 3. Authenticate (Self-Client OAuth) - One-Time Setup
-
-Zoho Desk uses OAuth2 with Self-Client for API access. You need to generate an authorization code **once**. After that, tokens are refreshed automatically.
-
-**Step 1: Create Self-Client in Zoho API Console**
+### Step 1: Create Zoho API Credentials
 
 1. Go to [Zoho API Console](https://api-console.zoho.com)
 2. Click **"Add Client"** → Select **"Self-Client"**
-3. Note your **Client ID** and **Client Secret**
+3. Copy your **Client ID** and **Client Secret**
 4. Get your **Organization ID** from Zoho Desk → Settings → Organization
 
-**Step 2: Generate Authorization Code**
+### Step 2: Initialize Configuration
+
+```bash
+zohodesk-cli config init
+```
+
+Enter your Client ID, Client Secret, Organization ID, and region when prompted.
+
+### Step 3: Authenticate (One-Time Setup)
+
+Generate an authorization code in Zoho API Console:
 
 1. In Zoho API Console, select your Self-Client
 2. Go to **"Generate Code"** tab
-3. Enter the following scopes:
-
-```
-Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.tasks.ALL,Desk.articles.READ,Desk.articles.CREATE,Desk.articles.UPDATE,Desk.articles.DELETE,Desk.search.READ,Desk.settings.READ
-```
-
-4. Set **Code Expiry Duration** to 10 minutes (or more)
+3. Enter these scopes:
+   ```
+   Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.tasks.ALL,Desk.articles.READ,Desk.articles.CREATE,Desk.articles.UPDATE,Desk.articles.DELETE,Desk.search.READ,Desk.settings.READ
+   ```
+4. Set duration to 10 minutes
 5. Click **"Create"**
-6. Copy the generated authorization code
+6. Copy the generated code
 
-**Step 3: Authenticate**
+Then authenticate:
 
 ```bash
 zohodesk-cli config auth -a YOUR_AUTHORIZATION_CODE
 ```
 
-**That's it!** After the initial authentication:
-- Access tokens are automatically refreshed when they expire
-- You only need to re-authenticate if the refresh token expires (rare)
-- Tokens are stored locally in `~/.config/zohodesk-cli/tokens/`
+**You're all set!** Tokens are automatically refreshed when they expire.
 
-### 4. Use the CLI
+## Usage Examples
+
+### Working with Tickets
 
 ```bash
 # List tickets
 zohodesk-cli tickets list
-
-# List open tickets
-zohodesk-cli tickets list --status Open
-
-# Get ticket details
-zohodesk-cli tickets get 123456789
+zohodesk-cli tickets list --status Open --priority High
+zohodesk-cli tickets list --limit 50 --output json
 
 # Create a ticket
 zohodesk-cli tickets create \
-  --subject "Login issue" \
-  --description "User cannot login to portal" \
-  --email user@example.com \
+  --subject "Cannot login to portal" \
+  --description "User reports login issues" \
+  --department DEPT_ID \
+  --contact-id CONTACT_ID \
   --priority High
 
-# Search tickets
-zohodesk-cli tickets search --email user@example.com
+# Get ticket details
+zohodesk-cli tickets get TICKET_ID
+zohodesk-cli tickets get TICKET_ID --context  # includes related data
 
-# For AI agents (JSON output)
-zohodesk-cli tickets list --output json
+# Update a ticket
+zohodesk-cli tickets update TICKET_ID --status "In Progress" --priority High
+
+# Close a ticket
+zohodesk-cli tickets close TICKET_ID --resolution "Issue resolved"
+
+# Add a comment
+zohodesk-cli comments note TICKET_ID --message "Investigating the issue"
+zohodesk-cli comments reply TICKET_ID --message "Thank you for your patience"
 ```
 
-## Documentation
-
-- [Installation Guide](./docs/INSTALLATION.md) - Detailed installation instructions
-- [Configuration Guide](./docs/CONFIGURATION.md) - Configuration and profiles
-- [Usage Examples](./docs/USAGE.md) - Common usage patterns
-- [API Reference](./docs/API.md) - Complete command reference
-
-## Batch Operations
-
-Create, update, or close multiple tickets from JSON input:
+### Working with Contacts
 
 ```bash
-# Create multiple tickets from JSON
-cat tickets.json | zohodesk-cli tickets create --batch
+# List contacts
+zohodesk-cli contacts list
 
-# Create from file
-zohodesk-cli tickets create --batch --file tickets.json
-
-# Update multiple tickets
-cat updates.json | zohodesk-cli tickets update --batch
-
-# Close multiple tickets
-echo '["123", "456", "789"]' | zohodesk-cli tickets close --batch
+# Search contacts
+zohodesk-cli contacts search --email user@example.com
 ```
 
-### Batch JSON Format
-
-**Create tickets:**
-```json
-[
-  {"subject": "Ticket 1", "email": "user1@example.com", "priority": "High"},
-  {"subject": "Ticket 2", "email": "user2@example.com", "priority": "Medium"}
-]
-```
-
-**Update tickets:**
-```json
-[
-  {"id": "123", "status": "Closed"},
-  {"id": "456", "priority": "High"}
-]
-```
-
-**Close tickets:**
-```json
-["123", "456", "789"]
-```
-
-## Comments and Replies
-
-Add public replies or private notes to tickets:
+### Working with Tags
 
 ```bash
-# List comments on a ticket
-zohodesk-cli comments list <ticket-id>
+# Add tags to a ticket
+zohodesk-cli tags add TICKET_ID --tag urgent --tag bug
 
-# Add a public reply
-zohodesk-cli comments reply <ticket-id> --message "Thank you for your report"
-
-# Add a private note
-zohodesk-cli comments note <ticket-id> --message "Internal note for the team"
+# List tags on a ticket
+zohodesk-cli tags list TICKET_ID
 ```
 
-## Ticket Assignment
-
-Assign tickets to agents and departments:
+### Working with Departments & Agents
 
 ```bash
-# Assign to an agent
-zohodesk-cli tickets assign <ticket-id> --agent <agent-id>
-
-# Assign to a department
-zohodesk-cli tickets assign <ticket-id> --department <dept-id>
-
-# Assign to both
-zohodesk-cli tickets assign <ticket-id> --agent <agent-id> --department <dept-id>
-```
-
-## Ticket Context
-
-Get tickets with full context (department, assignee, SLA):
-
-```bash
-# Get ticket with enriched context
-zohodesk-cli tickets get <ticket-id> --context --output json
-```
-
-## Departments
-
-Manage Zoho Desk departments:
-
-```bash
-# List all departments
+# List departments
 zohodesk-cli departments list
 
-# Get department details
-zohodesk-cli departments get <dept-id>
-```
-
-## Agents
-
-Manage Zoho Desk agents:
-
-```bash
-# List all agents
+# List agents
 zohodesk-cli agents list
 
-# Get agent details
-zohodesk-cli agents get <agent-id>
+# Assign ticket to agent
+zohodesk-cli tickets assign TICKET_ID --agent AGENT_ID
 ```
 
-## Attachments
-
-Manage file attachments on tickets:
-
-```bash
-# List attachments for a ticket
-zohodesk-cli attachments list <ticket-id>
-
-# Upload a file
-zohodesk-cli attachments upload <ticket-id> /path/to/file.pdf
-
-# Download an attachment
-zohodesk-cli attachments download <attachment-id> --output /path/to/save.pdf
-
-# Delete an attachment
-zohodesk-cli attachments delete <attachment-id>
-```
-
-## Knowledge Base
-
-Manage knowledge base articles:
+### Working with Articles (Knowledge Base)
 
 ```bash
 # List articles
@@ -275,185 +154,187 @@ zohodesk-cli articles list
 
 # Search articles
 zohodesk-cli articles search "password reset"
-
-# Create article
-zohodesk-cli articles create --title "FAQ" --content "Common questions..."
-
-# Update article
-zohodesk-cli articles update <article-id> --status "Published"
 ```
 
-## Tasks
-
-Manage tasks associated with tickets:
+### Working with Tasks
 
 ```bash
-# List all tasks
+# List tasks
 zohodesk-cli tasks list
 
-# List tasks for a ticket
-zohodesk-cli tasks list --ticket <ticket-id>
-
-# Create task
-zohodesk-cli tasks create --title "Follow up" --priority "High" --due 2024-01-15
-
-# Create task for a ticket
-zohodesk-cli tasks create --title "Review" --ticket <ticket-id>
-
-# Update task
-zohodesk-cli tasks update <task-id> --status "In Progress"
-
-# Complete task
-zohodesk-cli tasks complete <task-id>
-
-# Delete task
-zohodesk-cli tasks delete <task-id>
+# Create a task
+zohodesk-cli tasks create --title "Follow up with customer" --priority High
 ```
 
-## Products
-
-View products in your helpdesk:
+### Working with Attachments
 
 ```bash
-# List products
-zohodesk-cli products list
+# List attachments on a ticket
+zohodesk-cli attachments list TICKET_ID
 
-# Get product details
-zohodesk-cli products get <product-id>
+# Upload a file
+zohodesk-cli attachments upload TICKET_ID /path/to/file.pdf
+
+# Download an attachment
+zohodesk-cli attachments download ATTACHMENT_ID --output /path/to/save.pdf
 ```
 
-## Accounts
+### Batch Operations
 
-Manage customer accounts:
+Process multiple tickets at once using JSON input:
 
 ```bash
-# List accounts
-zohodesk-cli accounts list
+# Create multiple tickets
+echo '[
+  {"subject": "Issue 1", "departmentId": "123", "contactId": "456"},
+  {"subject": "Issue 2", "departmentId": "123", "contactId": "789"}
+]' | zohodesk-cli tickets create --batch
 
-# Get account details
-zohodesk-cli accounts get <account-id>
-
-# Create account
-zohodesk-cli accounts create --name "Acme Corp" --email "contact@acme.com"
-
-# Update account
-zohodesk-cli accounts update <account-id> --type "Customer"
-
-# Delete account
-zohodesk-cli accounts delete <account-id>
+# Close multiple tickets
+echo '["TICKET_ID_1", "TICKET_ID_2"]' | zohodesk-cli tickets close --batch
 ```
 
-## Tags
+### Output Formats
 
-Manage tags on tickets:
+All commands support multiple output formats:
 
 ```bash
-# List tags on a ticket
-zohodesk-cli tickets tags list <ticket-id>
+# Human-readable table (default)
+zohodesk-cli tickets list --limit 10
 
-# Add tags
-zohodesk-cli tickets tags add <ticket-id> --tag urgent --tag bug
+# JSON (for scripting and AI agents)
+zohodesk-cli tickets list --output json
 
-# Remove tag
-zohodesk-cli tickets tags remove <ticket-id> urgent
+# YAML
+zohodesk-cli tickets list --output yaml
 ```
 
-## Ticket Operations
+## Command Reference
+
+| Command | Description |
+|---------|-------------|
+| `tickets` | Manage tickets (create, list, get, update, close, merge, assign) |
+| `comments` | Add notes and replies to tickets |
+| `tags` | Manage ticket tags |
+| `contacts` | List and search contacts |
+| `departments` | List departments |
+| `agents` | List support agents |
+| `articles` | Knowledge base articles |
+| `tasks` | Task management |
+| `attachments` | File attachments |
+| `products` | List products |
+| `accounts` | Customer accounts |
+| `config` | Manage configuration |
+
+Use `zohodesk-cli [command] --help` for detailed usage information.
+
+## Configuration
+
+### Profiles
+
+Manage multiple Zoho Desk organizations:
 
 ```bash
-# Merge tickets
-zohodesk-cli tickets merge <source-id> <target-id>
+# Create new profile
+zohodesk-cli config set --profile production \
+  --client-id "PROD_CLIENT_ID" \
+  --client-secret "PROD_SECRET" \
+  --org-id "PROD_ORG_ID" \
+  --region com
 
-# Follow/unfollow tickets
-zohodesk-cli tickets follow <ticket-id>
-zohodesk-cli tickets unfollow <ticket-id>
+# Switch profiles
+zohodesk-cli config use production
 
-# Update with custom fields
-zohodesk-cli tickets update <ticket-id> --custom-fields '{"field": "value"}'
+# List profiles
+zohodesk-cli config list
 ```
+
+### Regions
+
+| Region | Flag | Zoho URL |
+|--------|------|----------|
+| United States | `--region com` | desk.zoho.com |
+| Europe | `--region eu` | desk.zoho.eu |
+| India | `--region in` | desk.zoho.in |
+| China | `--region cn` | desk.zoho.com.cn |
+| Australia | `--region au` | desk.zoho.com.au |
 
 ## For AI Agents
 
-This CLI is designed to be used by AI agents (Claude, GPT, etc.):
+Designed for AI agent integration (Claude, GPT, etc.):
+
+- All commands output structured JSON with `--output json`
+- Clear error messages for debugging
+- Batch operations for bulk processing
+- No interactive prompts blocking execution
+- Full ticket context with `--context` flag
+
+Example context for AI agents:
+
+```text
+The zohodesk-cli tool provides complete access to Zoho Desk API. 
+
+To create a ticket, you need:
+1. A department ID (get with `zohodesk-cli departments list`)
+2. A contact ID (search with `zohodesk-cli contacts search --email EMAIL`)
+
+Example workflow:
+1. Search for contact: zohodesk-cli contacts search --email user@example.com --output json
+2. Extract contactId from response
+3. Get department: zohodesk-cli departments list --output json
+4. Create ticket with required IDs
+```
+
+## Troubleshooting
+
+### Authentication Issues
+
+**Error: "no valid authentication token found"**
+
+Run authentication:
+```bash
+zohodesk-cli config auth -a YOUR_AUTHORIZATION_CODE
+```
+
+**Error: "invalid_code"**
+
+The authorization code has expired (valid for 10 minutes). Generate a new code in Zoho API Console.
+
+### Common Issues
+
+**Ticket creation requires department and contact:**
 
 ```bash
-# All commands support JSON output
-zohodesk-cli tickets list --output json
+# Find department ID
+zohodesk-cli departments list --output json
 
-# Get ticket details as JSON
-zohodesk-cli tickets get 123456789 --output json
+# Find or search contact
+zohodesk-cli contacts search --email user@example.com --output json
 
-# Create ticket and get JSON response
+# Create ticket with IDs
 zohodesk-cli tickets create \
-  --subject "Bug report" \
-  --email user@example.com \
-  --output json
+  --subject "Issue" \
+  --department DEPT_ID \
+  --contact-id CONTACT_ID
 ```
 
-### JSON Output Example
-
-```json
-[
-  {
-    "id": "123456789",
-    "ticketNumber": "TKT-001",
-    "subject": "Login issue",
-    "status": "Open",
-    "priority": "High",
-    "createdTime": "2024-01-15T10:30:00Z",
-    "contactEmail": "user@example.com"
-  }
-]
-```
-
-## Authentication
-
-zohodesk-cli uses **Self-Client OAuth** which requires no browser interaction:
-
-1. Access tokens are obtained automatically using client credentials
-2. Tokens are cached locally in `~/.config/zohodesk-cli/tokens/`
-3. Tokens are refreshed automatically when expired
-
-## Regions
-
-| Region | Base URL |
-|--------|----------|
-| com | https://desk.zoho.com |
-| eu | https://desk.zoho.eu |
-| in | https://desk.zoho.in |
-| cn | https://desk.zoho.com.cn |
-| au | https://desk.zoho.com.au |
-
-## Development
-
-```bash
-# Clone the repository
-git clone https://github.com/jrodriguezruibal/zohodesk-cli.git
-cd zohodesk-cli
-
-# Build
-make build
-
-# Install locally
-make install
-
-# Run tests
-make test
-```
-
-## License
-
-[MIT License](./LICENSE)
+**Empty responses:** Some fields may return empty from the Zoho Desk API (e.g., task titles, account names). This is expected behavior from Zoho.
 
 ## Contributing
 
+Contributions are welcome! Please read our contributing guidelines before submitting PRs.
+
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `go test ./...`
+5. Submit a pull request
+
+## License
+
+[MIT License](LICENSE)
 
 ## Support
 
-- [GitHub Issues](https://github.com/jrodriguezruibal/zohodesk-cli/issues)
-- [Zoho Desk API Documentation](https://www.zoho.com/desk/api.html)
+- **Issues:** [GitHub Issues](https://github.com/jrodriguezruibal/zohodesk-cli/issues)
+- **Zoho Desk API:** [Official Documentation](https://www.zoho.com/desk/api.html)
