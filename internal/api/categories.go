@@ -35,12 +35,9 @@ func (s *CategoriesService) Get(ctx context.Context, categoryID string) (*models
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Category `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelscategory models.Category
+	if err := unmarshalData(data, &modelscategory); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelscategory, nil
 }

@@ -35,14 +35,11 @@ func (s *AccountsService) Get(ctx context.Context, accountID string) (*models.Ac
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Account `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsaccount models.Account
+	if err := unmarshalData(data, &modelsaccount); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsaccount, nil
 }
 
 func (s *AccountsService) Create(ctx context.Context, req models.AccountCreateRequest) (*models.Account, error) {
@@ -51,14 +48,11 @@ func (s *AccountsService) Create(ctx context.Context, req models.AccountCreateRe
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Account `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsaccount models.Account
+	if err := unmarshalData(data, &modelsaccount); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsaccount, nil
 }
 
 func (s *AccountsService) Update(ctx context.Context, accountID string, req models.AccountUpdateRequest) (*models.Account, error) {
@@ -67,14 +61,11 @@ func (s *AccountsService) Update(ctx context.Context, accountID string, req mode
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Account `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsaccount models.Account
+	if err := unmarshalData(data, &modelsaccount); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsaccount, nil
 }
 
 func (s *AccountsService) Delete(ctx context.Context, accountID string) error {

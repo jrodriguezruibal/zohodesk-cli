@@ -35,12 +35,9 @@ func (s *ProductsService) Get(ctx context.Context, productID string) (*models.Pr
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Product `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsproduct models.Product
+	if err := unmarshalData(data, &modelsproduct); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsproduct, nil
 }

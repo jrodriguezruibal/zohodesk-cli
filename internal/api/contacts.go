@@ -44,14 +44,11 @@ func (s *ContactsService) Get(ctx context.Context, contactID string) (*models.Co
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Contact `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelscontact models.Contact
+	if err := unmarshalData(data, &modelscontact); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelscontact, nil
 }
 
 func (s *ContactsService) Search(ctx context.Context, email string, name string) ([]models.Contact, error) {

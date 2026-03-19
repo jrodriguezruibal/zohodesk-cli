@@ -43,14 +43,11 @@ func (s *AgentsService) Get(ctx context.Context, agentID string) (*models.Agent,
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Agent `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsagent models.Agent
+	if err := unmarshalData(data, &modelsagent); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsagent, nil
 }
 
 func (s *AgentsService) Search(ctx context.Context, email string, name string) ([]models.Agent, error) {

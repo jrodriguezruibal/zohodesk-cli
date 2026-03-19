@@ -40,14 +40,11 @@ func (s *TasksService) Get(ctx context.Context, taskID string) (*models.Task, er
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Task `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelstask models.Task
+	if err := unmarshalData(data, &modelstask); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelstask, nil
 }
 
 func (s *TasksService) Create(ctx context.Context, req models.TaskCreateRequest) (*models.Task, error) {
@@ -56,14 +53,11 @@ func (s *TasksService) Create(ctx context.Context, req models.TaskCreateRequest)
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Task `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelstask models.Task
+	if err := unmarshalData(data, &modelstask); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelstask, nil
 }
 
 func (s *TasksService) Update(ctx context.Context, taskID string, req models.TaskUpdateRequest) (*models.Task, error) {
@@ -72,14 +66,11 @@ func (s *TasksService) Update(ctx context.Context, taskID string, req models.Tas
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Task `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelstask models.Task
+	if err := unmarshalData(data, &modelstask); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelstask, nil
 }
 
 func (s *TasksService) Complete(ctx context.Context, taskID string) error {

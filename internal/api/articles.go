@@ -43,14 +43,11 @@ func (s *ArticlesService) Get(ctx context.Context, articleID string) (*models.Ar
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Article `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsarticle models.Article
+	if err := unmarshalData(data, &modelsarticle); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsarticle, nil
 }
 
 func (s *ArticlesService) Search(ctx context.Context, query string) ([]models.Article, error) {
@@ -64,14 +61,11 @@ func (s *ArticlesService) Create(ctx context.Context, req models.ArticleCreateRe
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Article `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsarticle models.Article
+	if err := unmarshalData(data, &modelsarticle); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsarticle, nil
 }
 
 func (s *ArticlesService) Update(ctx context.Context, articleID string, req models.ArticleUpdateRequest) (*models.Article, error) {
@@ -80,14 +74,11 @@ func (s *ArticlesService) Update(ctx context.Context, articleID string, req mode
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Article `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsarticle models.Article
+	if err := unmarshalData(data, &modelsarticle); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsarticle, nil
 }
 
 func (s *ArticlesService) Delete(ctx context.Context, articleID string) error {

@@ -43,12 +43,9 @@ func (s *DepartmentsService) Get(ctx context.Context, departmentID string) (*mod
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Department `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var modelsdepartment models.Department
+	if err := unmarshalData(data, &modelsdepartment); err != nil {
 		return nil, err
 	}
-
-	return &resp.Data, nil
+	return &modelsdepartment, nil
 }

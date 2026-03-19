@@ -11,8 +11,8 @@ type Article struct {
 	AuthorName    string   `json:"authorName,omitempty" yaml:"authorName,omitempty"`
 	Status        string   `json:"status,omitempty" yaml:"status,omitempty"`
 	Tags          []string `json:"tags,omitempty" yaml:"tags,omitempty"`
-	ViewCount     int      `json:"viewCount,omitempty" yaml:"viewCount,omitempty"`
-	LikeCount     int      `json:"likeCount,omitempty" yaml:"likeCount,omitempty"`
+	ViewCount     string   `json:"viewCount,omitempty" yaml:"viewCount,omitempty"`
+	LikeCount     string   `json:"likeCount,omitempty" yaml:"likeCount,omitempty"`
 	CreatedTime   string   `json:"createdTime,omitempty" yaml:"createdTime,omitempty"`
 	ModifiedTime  string   `json:"modifiedTime,omitempty" yaml:"modifiedTime,omitempty"`
 	PublishedTime string   `json:"publishedTime,omitempty" yaml:"publishedTime,omitempty"`
