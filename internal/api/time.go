@@ -35,14 +35,12 @@ func (s *TimeService) Add(ctx context.Context, ticketID string, req models.TimeE
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.TimeEntry `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var entry models.TimeEntry
+	if err := unmarshalData(data, &entry); err != nil {
 		return nil, err
 	}
 
-	return &resp.Data, nil
+	return &entry, nil
 }
 
 func (s *TimeService) Delete(ctx context.Context, timeEntryID string) error {

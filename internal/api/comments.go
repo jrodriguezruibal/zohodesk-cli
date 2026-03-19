@@ -42,14 +42,12 @@ func (s *CommentsService) Get(ctx context.Context, ticketID string, commentID st
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Comment `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var comment models.Comment
+	if err := unmarshalData(data, &comment); err != nil {
 		return nil, err
 	}
 
-	return &resp.Data, nil
+	return &comment, nil
 }
 
 func (s *CommentsService) Create(ctx context.Context, ticketID string, req models.CommentCreateRequest) (*models.Comment, error) {
@@ -58,14 +56,12 @@ func (s *CommentsService) Create(ctx context.Context, ticketID string, req model
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Comment `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
+	var comment models.Comment
+	if err := unmarshalData(data, &comment); err != nil {
 		return nil, err
 	}
 
-	return &resp.Data, nil
+	return &comment, nil
 }
 
 func (s *CommentsService) Reply(ctx context.Context, ticketID string, content string, isPublic bool) (*models.Comment, error) {
