@@ -34,6 +34,7 @@ func (a *Auth) ExchangeCode(ctx context.Context, code string) (*TokenResponse, e
 	data.Set("client_secret", a.config.ClientSecret)
 	data.Set("code", code)
 	data.Set("redirect_uri", "self")
+	data.Set("access_type", "offline")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, nil)
 	if err != nil {
