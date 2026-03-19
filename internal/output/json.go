@@ -298,6 +298,50 @@ func PrintSLAStats(stats *models.SLAStats, format string) error {
 	}
 }
 
+func PrintProducts(products []models.Product, format string) error {
+	switch format {
+	case "json":
+		return printJSON(products)
+	case "yaml":
+		return printYAML(products)
+	default:
+		return printProductsTable(products)
+	}
+}
+
+func PrintProduct(product *models.Product, format string) error {
+	switch format {
+	case "json":
+		return printJSON(product)
+	case "yaml":
+		return printYAML(product)
+	default:
+		return printProductTable(product)
+	}
+}
+
+func PrintAccounts(accounts []models.Account, format string) error {
+	switch format {
+	case "json":
+		return printJSON(accounts)
+	case "yaml":
+		return printYAML(accounts)
+	default:
+		return printAccountsTable(accounts)
+	}
+}
+
+func PrintAccount(account *models.Account, format string) error {
+	switch format {
+	case "json":
+		return printJSON(account)
+	case "yaml":
+		return printYAML(account)
+	default:
+		return printAccountTable(account)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

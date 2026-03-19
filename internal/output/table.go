@@ -770,3 +770,123 @@ func printSLAStatsTable(stats *models.SLAStats) error {
 
 	return nil
 }
+
+func printProductsTable(products []models.Product) error {
+	if len(products) == 0 {
+		fmt.Println("No products found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Code", "Active"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, p := range products {
+		active := "No"
+		if p.IsActive {
+			active = "Yes"
+		}
+		table.Append([]string{
+			p.ID,
+			p.Name,
+			p.ProductCode,
+			active,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d products\n", len(products))
+	return nil
+}
+
+func printProductTable(product *models.Product) error {
+	fmt.Printf("\nProduct: %s\n", product.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:  %s\n", product.Name)
+	if product.ProductCode != "" {
+		fmt.Printf("Code:  %s\n", product.ProductCode)
+	}
+	if product.Description != "" {
+		fmt.Printf("Description: %s\n", product.Description)
+	}
+	if product.Category != "" {
+		fmt.Printf("Category: %s\n", product.Category)
+	}
+	active := "Inactive"
+	if product.IsActive {
+		active = "Active"
+	}
+	fmt.Printf("Status: %s\n", active)
+	fmt.Printf("Created: %s\n", product.CreatedTime)
+	return nil
+}
+
+func printAccountsTable(accounts []models.Account) error {
+	if len(accounts) == 0 {
+		fmt.Println("No accounts found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name", "Email", "Type", "Active"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, a := range accounts {
+		active := "No"
+		if a.IsActive {
+			active = "Yes"
+		}
+		table.Append([]string{
+			a.ID,
+			a.Name,
+			a.Email,
+			a.Type,
+			active,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d accounts\n", len(accounts))
+	return nil
+}
+
+func printAccountTable(account *models.Account) error {
+	fmt.Printf("\nAccount: %s\n", account.ID)
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Name:  %s\n", account.Name)
+	if account.Email != "" {
+		fmt.Printf("Email: %s\n", account.Email)
+	}
+	if account.Phone != "" {
+		fmt.Printf("Phone: %s\n", account.Phone)
+	}
+	if account.Website != "" {
+		fmt.Printf("Website: %s\n", account.Website)
+	}
+	if account.Type != "" {
+		fmt.Printf("Type:     %s\n", account.Type)
+	}
+	if account.Industry != "" {
+		fmt.Printf("Industry: %s\n", account.Industry)
+	}
+	if account.OwnerName != "" {
+		fmt.Printf("Owner:   %s\n", account.OwnerName)
+	}
+	active := "Inactive"
+	if account.IsActive {
+		active = "Active"
+	}
+	fmt.Printf("Status: %s\n", active)
+	fmt.Printf("Created: %s\n", account.CreatedTime)
+	return nil
+}

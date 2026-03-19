@@ -5,6 +5,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-03-18
+
+### Added
+- **Products Commands**: View products in your helpdesk
+  - `products list` - List all products
+  - `products get <id>` - Get product details
+- **Accounts Commands**: Manage customer accounts
+  - `accounts list` - List all accounts
+  - `accounts get <id>` - Get account details
+  - `accounts create` - Create a new account
+  - `accounts update <id>` - Update an account
+  - `accounts delete <id>` - Delete an account
+- New models: Product, Account, AccountCreateRequest, AccountUpdateRequest
+- New services: ProductsService, AccountsService
+- Output formatters for products and accounts
+
+### Changed
+- Updated documentation (USAGE.md, API.md, README.md)
+
 ## [0.7.0] - 2026-03-18
 
 ### Added

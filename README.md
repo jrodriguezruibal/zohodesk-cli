@@ -19,6 +19,7 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Knowledge Base**: Manage articles and categories
 - **Tasks**: Manage tasks with due dates, priorities, and statuses
 - **Reports**: Ticket statistics, agent performance, and SLA compliance
+- **Products & Accounts**: Manage products and customer accounts
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -329,6 +330,39 @@ zohodesk-cli reports sla
 
 # SLA by department
 zohodesk-cli reports sla --department <dept-id>
+```
+
+## Products
+
+View products in your helpdesk:
+
+```bash
+# List products
+zohodesk-cli products list
+
+# Get product details
+zohodesk-cli products get <product-id>
+```
+
+## Accounts
+
+Manage customer accounts:
+
+```bash
+# List accounts
+zohodesk-cli accounts list
+
+# Get account details
+zohodesk-cli accounts get <account-id>
+
+# Create account
+zohodesk-cli accounts create --name "Acme Corp" --email "contact@acme.com"
+
+# Update account
+zohodesk-cli accounts update <account-id> --type "Customer"
+
+# Delete account
+zohodesk-cli accounts delete <account-id>
 ```
 
 ## For AI Agents

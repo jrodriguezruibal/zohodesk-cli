@@ -491,6 +491,86 @@ zohodesk-cli reports sla --department 123456789
 zohodesk-cli reports sla --output json
 ```
 
+## Products
+
+### List Products
+
+```bash
+# List all products
+zohodesk-cli products list
+
+# JSON output
+zohodesk-cli products list --output json
+```
+
+### Get Product
+
+```bash
+# Product details
+zohodesk-cli products get 123456789
+
+# JSON output
+zohodesk-cli products get 123456789 --output json
+```
+
+## Accounts
+
+### List Accounts
+
+```bash
+# List all accounts
+zohodesk-cli accounts list
+
+# JSON output
+zohodesk-cli accounts list --output json
+```
+
+### Get Account
+
+```bash
+# Account details
+zohodesk-cli accounts get 123456789
+
+# JSON output
+zohodesk-cli accounts get 123456789 --output json
+```
+
+### Create Account
+
+```bash
+# Create account
+zohodesk-cli accounts create \
+  --name "Acme Corp" \
+  --email "contact@acme.com" \
+  --phone "+1234567890"
+
+# With additional fields
+zohodesk-cli accounts create \
+  --name "Acme Corp" \
+  --type "Customer" \
+  --industry "Technology"
+
+# JSON output
+zohodesk-cli accounts create --name "New Account" --output json
+```
+
+### Update Account
+
+```bash
+# Update account
+zohodesk-cli accounts update 123456789 --name "Updated Name"
+
+# JSON output
+zohodesk-cli accounts update 123456789 --type "Partner" --output json
+```
+
+### Delete Account
+
+```bash
+# Delete account
+zohodesk-cli accounts delete 123456789
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets

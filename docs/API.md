@@ -758,6 +758,138 @@ zohodesk-cli reports sla [flags]
 | `--department` | `-d` | Filter by department ID |
 | `--output` | `-o` | Output format |
 
+## Products Commands
+
+### `zohodesk-cli products list`
+
+List all products.
+
+```bash
+zohodesk-cli products list [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli products get`
+
+Get product details.
+
+```bash
+zohodesk-cli products get <product-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `product-id` | Product ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+## Accounts Commands
+
+### `zohodesk-cli accounts list`
+
+List all accounts.
+
+```bash
+zohodesk-cli accounts list [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli accounts get`
+
+Get account details.
+
+```bash
+zohodesk-cli accounts get <account-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `account-id` | Account ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli accounts create`
+
+Create a new account.
+
+```bash
+zohodesk-cli accounts create [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description | Required |
+|------|-------|-------------|----------|
+| `--name` | `-n` | Account name | Yes |
+| `--email` | `-e` | Account email | No |
+| `--phone` | `-p` | Account phone | No |
+| `--website` | `-w` | Account website | No |
+| `--type` | `-t` | Account type | No |
+| `--industry` | `-i` | Account industry | No |
+| `--owner` | `-o` | Owner ID | No |
+
+### `zohodesk-cli accounts update`
+
+Update an account.
+
+```bash
+zohodesk-cli accounts update <account-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `account-id` | Account ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--name` | `-n` | Account name |
+| `--email` | `-e` | Account email |
+| `--phone` | `-p` | Account phone |
+| `--website` | `-w` | Account website |
+| `--type` | `-t` | Account type |
+| `--industry` | `-i` | Account industry |
+| `--owner` | `-o` | Owner ID |
+
+### `zohodesk-cli accounts delete`
+
+Delete an account.
+
+```bash
+zohodesk-cli accounts delete <account-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `account-id` | Account ID | Yes |
+
 ## Output Formats
 
 ### JSON
