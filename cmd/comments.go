@@ -47,8 +47,6 @@ var commentsNoteCmd = &cobra.Command{
 var (
 	commentMessage string
 	commentPublic  bool
-	batchFlag      bool
-	batchFile      string
 )
 
 func init() {
@@ -63,19 +61,9 @@ func init() {
 	commentsReplyCmd.Flags().StringVarP(&outputFormat, "output", "o", "table", "output format")
 	commentsReplyCmd.MarkFlagRequired("message")
 
-	commentsNoteCmd.Flags().StringVarP(&commentMessage, "message", "m", "", "note message (required)")
+commentsNoteCmd.Flags().StringVarP(&commentMessage, "message", "m", "", "note message (required)")
 	commentsNoteCmd.Flags().StringVarP(&outputFormat, "output", "o", "table", "output format")
 	commentsNoteCmd.MarkFlagRequired("message")
-
-	// Add batch flags to tickets commands
-	ticketsCreateCmd.Flags().BoolVarP(&batchFlag, "batch", "b", false, "read batch input from stdin (JSON array)")
-	ticketsCreateCmd.Flags().StringVarP(&batchFile, "file", "f", "", "read batch input from file (JSON array)")
-
-	ticketsUpdateCmd.Flags().BoolVarP(&batchFlag, "batch", "b", false, "read batch input from stdin (JSON array)")
-	ticketsUpdateCmd.Flags().StringVarP(&batchFile, "file", "f", "", "read batch input from file (JSON array)")
-
-	ticketsCloseCmd.Flags().BoolVarP(&batchFlag, "batch", "b", false, "read batch input from stdin (JSON array of ticket IDs)")
-	ticketsCloseCmd.Flags().StringVarP(&batchFile, "file", "f", "", "read batch input from file (JSON array of ticket IDs)")
 }
 
 func runCommentsList(cmd *cobra.Command, args []string) error {
@@ -130,8 +118,8 @@ func runCommentsNote(cmd *cobra.Command, args []string) error {
 }
 
 func getBatchReader() (io.Reader, error) {
-	if batchFile != "" {
-		file, err := os.Open(batchFile)
+	if flagBatchFile != "" {
+		file, err := os.Open(flagBatchFile)
 		if err != nil {
 			return nil, fmt.Errorf("failed to open file: %w", err)
 		}
