@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Fixed Tickets Get/Create, Comments Add responses
 - **Flag Conflicts**: Changed `--context` shorthand from `-c` to `-C` to avoid conflict with `--config`
 - **Scopes**: Updated to valid Zoho Desk API scopes only
+- **JSON Field Types**: Changed viewCount and likeCount in Article model from int to string
 
 ### Added
 - `--contact-id` flag for ticket creation (contacts are required in Zoho Desk API)
@@ -29,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ticket creation now requires `--department` and `--contact-id` (or `--email`)
 - Updated documentation with correct authentication instructions
 - Authentication is now one-time setup with automatic token refresh
+
+### Removed
+- **Time Tracking commands** (`time list/add/delete/report`): API endpoint not available in Zoho Desk
+- **Categories commands** (`categories list/get`): API returns null data
 
 ## [0.9.0] - 2026-03-18
 

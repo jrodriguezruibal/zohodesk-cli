@@ -235,63 +235,6 @@ zohodesk-cli agents get 123456789
 zohodesk-cli agents get 123456789 --output json
 ```
 
-## Time Tracking
-
-### List Time Entries
-
-```bash
-# List all time entries for a ticket
-zohodesk-cli time list 123456789
-
-# JSON output
-zohodesk-cli time list 123456789 --output json
-```
-
-### Add Time Entry
-
-```bash
-# Add 1 hour and 30 minutes
-zohodesk-cli time add 123456789 --duration 1h30m --description "Investigated the issue"
-
-# Add 2 hours
-zohodesk-cli time add 123456789 --duration 2h --description "Fixed the bug"
-
-# Add 45 minutes
-zohodesk-cli time add 123456789 --duration 45m --description "Testing"
-
-# Add time for specific agent
-zohodesk-cli time add 123456789 --duration 1h --agent 987654321 --description "Review"
-
-# Add time with execution date
-zohodesk-cli time add 123456789 --duration 2h --executed 2024-01-15 --description "Work done yesterday"
-
-# JSON output
-zohodesk-cli time add 123456789 --duration 1h --description "Investigating" --output json
-```
-
-### Delete Time Entry
-
-```bash
-# Delete a time entry
-zohodesk-cli time delete 987654321
-```
-
-### Time Report
-
-```bash
-# Get time report
-zohodesk-cli time report
-
-# Filter by agent
-zohodesk-cli time report --agent 123456789
-
-# Filter by date range
-zohodesk-cli time report --from 2024-01-01 --to 2024-01-31
-
-# JSON output
-zohodesk-cli time report --output json
-```
-
 ## Attachments
 
 ### List Attachments
@@ -400,19 +343,6 @@ zohodesk-cli articles update 123456789 --status "Draft" --output json
 ```bash
 # Delete an article
 zohodesk-cli articles delete 123456789
-```
-
-### Categories
-
-```bash
-# List all categories
-zohodesk-cli categories list
-
-# Get category details
-zohodesk-cli categories get 123456789
-
-# JSON output
-zohodesk-cli categories list --output json
 ```
 
 ## Tasks

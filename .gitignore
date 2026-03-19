@@ -61,3 +61,6 @@ temp/
 # Project planning (local only)
 ROADMAP.md
 PROGRESS.md
+
+# Test scripts
+test_zohodesk.sh

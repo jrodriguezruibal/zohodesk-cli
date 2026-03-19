@@ -8,18 +8,18 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Multiple output formats**: JSON, YAML, and human-readable tables
 - **TUI setup**: Interactive configuration wizard
 - **Agent-friendly**: Designed for use by AI agents (Claude, GPT, etc.)
-- **Self-Client OAuth**: No browser interaction required
+- **Self-Client OAuth**: One-time setup with automatic token refresh
 - **Batch operations**: Create, update, or close multiple tickets from JSON input
 - **Comments/Replies**: Add public replies and private notes to tickets
 - **Ticket assignment**: Assign tickets to agents and departments
 - **Context enrichment**: Get tickets with full context (department, assignee, SLA)
 - **Departments & Agents**: List and manage departments and agents
-- **Time tracking**: Log time on tickets and generate reports
 - **Attachments**: Upload, download, and manage file attachments
-- **Knowledge Base**: Manage articles and categories
+- **Knowledge Base**: Manage articles (categories endpoint not available)
 - **Tasks**: Manage tasks with due dates, priorities, and statuses
 - **Reports**: Ticket statistics, agent performance, and SLA compliance
 - **Products & Accounts**: Manage products and customer accounts
+- **Tags**: Manage ticket tags
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -248,30 +248,6 @@ zohodesk-cli agents list
 zohodesk-cli agents get <agent-id>
 ```
 
-## Time Tracking
-
-Log time spent on tickets:
-
-```bash
-# List time entries for a ticket
-zohodesk-cli time list <ticket-id>
-
-# Add time entry (1 hour 30 minutes)
-zohodesk-cli time add <ticket-id> --duration 1h30m --description "Investigating issue"
-
-# Add time for another agent
-zohodesk-cli time add <ticket-id> --duration 2h --agent <agent-id> --description "Code review"
-
-# View time report
-zohodesk-cli time report
-
-# Filter report by agent
-zohodesk-cli time report --agent <agent-id>
-
-# Filter by date range
-zohodesk-cli time report --from 2024-01-01 --to 2024-01-31
-```
-
 ## Attachments
 
 Manage file attachments on tickets:
@@ -292,7 +268,7 @@ zohodesk-cli attachments delete <attachment-id>
 
 ## Knowledge Base
 
-Manage knowledge base articles and categories:
+Manage knowledge base articles:
 
 ```bash
 # List articles
@@ -306,12 +282,6 @@ zohodesk-cli articles create --title "FAQ" --content "Common questions..."
 
 # Update article
 zohodesk-cli articles update <article-id> --status "Published"
-
-# List categories
-zohodesk-cli categories list
-
-# Get category
-zohodesk-cli categories get <category-id>
 ```
 
 ## Tasks
