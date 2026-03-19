@@ -1,8 +1,10 @@
 package cmd
 
 import (
-		"fmt"
+	"context"
+	"fmt"
 
+	"github.com/jrodriguezruibal/zohodesk-cli/internal/api"
 	"github.com/jrodriguezruibal/zohodesk-cli/internal/config"
 	"github.com/jrodriguezruibal/zohodesk-cli/internal/tui"
 	"github.com/spf13/cobra"
@@ -50,10 +52,17 @@ var configUseCmd = &cobra.Command{
 }
 
 var configClearTokensCmd = &cobra.Command{
-		Use:   "clear-tokens",
-		Short: "Clear cached tokens",
-		Long:  `Clear cached authentication tokens.`,
-		RunE:  runConfigClearTokens,
+	Use:   "clear-tokens",
+	Short: "Clear cached tokens",
+	Long:  `Clear cached authentication tokens.`,
+	RunE:  runConfigClearTokens,
+}
+
+var configAuthCmd = &cobra.Command{
+	Use:   "auth",
+	Short: "Authenticate with authorization code",
+	Long:  `Exchange authorization code for tokens (for Self-Client OAuth flow).`,
+	RunE:  runConfigAuth,
 }
 
 var (
@@ -62,30 +71,35 @@ var (
 	configFlagClientSecret string
 	configFlagOrgID       string
 	configFlagRegion      string
+	configFlagCode        string
 )
 
 func init() {
-		rootCmd.AddCommand(configCmd)
-		configCmd.AddCommand(configInitCmd)
-		configCmd.AddCommand(configListCmd)
-		configCmd.AddCommand(configSetCmd)
-		configCmd.AddCommand(configDeleteCmd)
-		configCmd.AddCommand(configUseCmd)
-		configCmd.AddCommand(configClearTokensCmd)
+	rootCmd.AddCommand(configCmd)
+	configCmd.AddCommand(configInitCmd)
+	configCmd.AddCommand(configListCmd)
+	configCmd.AddCommand(configSetCmd)
+	configCmd.AddCommand(configDeleteCmd)
+	configCmd.AddCommand(configUseCmd)
+	configCmd.AddCommand(configClearTokensCmd)
+	configCmd.AddCommand(configAuthCmd)
 
-		configSetCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "default", "profile name")
-		configSetCmd.Flags().StringVarP(&configFlagClientID, "client-id", "c", "", "Zoho Client ID")
-		configSetCmd.Flags().StringVarP(&configFlagClientSecret, "client-secret", "s", "", "Zoho Client Secret")
-		configSetCmd.Flags().StringVarP(&configFlagOrgID, "org-id", "o", "", "Zoho Organization ID")
-		configSetCmd.Flags().StringVarP(&configFlagRegion, "region", "r", "com", "Zoho region (com, eu, in, cn, au)")
+	configSetCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "default", "profile name")
+	configSetCmd.Flags().StringVarP(&configFlagClientID, "client-id", "c", "", "Zoho Client ID")
+	configSetCmd.Flags().StringVarP(&configFlagClientSecret, "client-secret", "s", "", "Zoho Client Secret")
+	configSetCmd.Flags().StringVarP(&configFlagOrgID, "org-id", "o", "", "Zoho Organization ID")
+	configSetCmd.Flags().StringVarP(&configFlagRegion, "region", "r", "com", "Zoho region (com, eu, in, cn, au)")
 
-		configDeleteCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name to delete")
-		configDeleteCmd.MarkFlagRequired("profile")
+	configDeleteCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name to delete")
+	configDeleteCmd.MarkFlagRequired("profile")
 
-		configUseCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name to set as default")
-		configUseCmd.MarkFlagRequired("profile")
+	configUseCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name to set as default")
+	configUseCmd.MarkFlagRequired("profile")
 
-		configClearTokensCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name (default: all)")
+	configClearTokensCmd.Flags().StringVarP(&configFlagProfile, "profile", "p", "", "profile name (default: all)")
+
+	configAuthCmd.Flags().StringVarP(&configFlagCode, "code", "a", "", "authorization code from Zoho API Console")
+	configAuthCmd.MarkFlagRequired("code")
 }
 
 func runConfigInit(cmd *cobra.Command, args []string) error {
@@ -242,4 +256,42 @@ func runConfigClearTokens(cmd *cobra.Command, args []string) error {
 		}
 
 		return nil
+}
+
+func runConfigAuth(cmd *cobra.Command, args []string) error {
+	profileName := getProfile()
+
+	cfg, err := getConfig()
+	if err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
+	}
+
+	profile, exists := cfg.Profiles[profileName]
+	if !exists {
+		return fmt.Errorf("profile '%s' not found. Run 'config init' first", profileName)
+	}
+
+	auth := api.NewAuth(&profile)
+
+	token, err := auth.ExchangeCode(context.Background(), configFlagCode)
+	if err != nil {
+		return fmt.Errorf("failed to exchange code: %w", err)
+	}
+
+	cache := &config.TokenCache{
+		AccessToken:  token.AccessToken,
+		RefreshToken: token.RefreshToken,
+		ExpiresAt:    token.ExpiresAt,
+		OrgID:        profile.OrgID,
+	}
+
+	if err := config.SaveTokenCache(profileName, cache); err != nil {
+		return fmt.Errorf("failed to save token: %w", err)
+	}
+
+	fmt.Printf("Authentication successful!\n")
+	fmt.Printf("Access token expires at: %s\n", token.ExpiresAt.Format("2006-01-02 15:04:05"))
+	fmt.Printf("Profile: %s\n", profileName)
+
+	return nil
 }

@@ -49,6 +49,24 @@ func (c *Client) ensureToken(ctx context.Context) error {
 	}
 
 	auth := NewAuth(c.config)
+
+	if cache != nil && cache.RefreshToken != "" {
+		token, err := auth.RefreshToken(ctx, cache.RefreshToken)
+		if err == nil {
+			cache = &config.TokenCache{
+				AccessToken:  token.AccessToken,
+				RefreshToken: token.RefreshToken,
+				ExpiresAt:    token.ExpiresAt,
+				OrgID:        c.config.OrgID,
+			}
+			if err := config.SaveTokenCache(c.profileName, cache); err != nil {
+				return fmt.Errorf("failed to save token cache: %w", err)
+			}
+			c.tokenCache = cache
+			return nil
+		}
+	}
+
 	token, err := auth.GetAccessToken(ctx)
 	if err != nil {
 		return fmt.Errorf("failed to get access token: %w", err)
@@ -57,7 +75,7 @@ func (c *Client) ensureToken(ctx context.Context) error {
 	cache = &config.TokenCache{
 		AccessToken:  token.AccessToken,
 		RefreshToken: token.RefreshToken,
-		ExpiresAt:    time.Now().Add(time.Duration(token.ExpiresIn) * time.Second),
+		ExpiresAt:    token.ExpiresAt,
 		OrgID:        c.config.OrgID,
 	}
 
