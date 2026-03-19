@@ -75,33 +75,41 @@ go install github.com/jrodriguezruibal/zohodesk-cli@latest
 zohodesk-cli config init
 ```
 
-### 3. Authenticate (Self-Client OAuth)
+### 3. Authenticate (Self-Client OAuth) - One-Time Setup
 
-For Self-Client, you need to generate an authorization code and exchange it for tokens:
+Zoho Desk uses OAuth2 with Self-Client for API access. You need to generate an authorization code **once**. After that, tokens are refreshed automatically.
+
+**Step 1: Create Self-Client in Zoho API Console**
 
 1. Go to [Zoho API Console](https://api-console.zoho.com)
-2. Select your **Self-Client**
-3. Go to **"Generate Code"** tab
-4. Enter scopes: `Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.articles.ALL,Desk.tasks.ALL,Desk.timetracker.ALL,Desk.accounts.ALL,Desk.products.READ,Desk.setup.READ`
-5. Set duration (e.g., 10 mins)
-6. Click **"Create"**
-7. Copy the generated code
-8. Exchange the code for tokens:
+2. Click **"Add Client"** → Select **"Self-Client"**
+3. Note your **Client ID** and **Client Secret**
+4. Get your **Organization ID** from Zoho Desk → Settings → Organization
+
+**Step 2: Generate Authorization Code**
+
+1. In Zoho API Console, select your Self-Client
+2. Go to **"Generate Code"** tab
+3. Enter the following scopes:
+
+```
+Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.tasks.ALL,Desk.articles.READ,Desk.articles.CREATE,Desk.articles.UPDATE,Desk.articles.DELETE,Desk.search.READ,Desk.settings.READ
+```
+
+4. Set **Code Expiry Duration** to 10 minutes (or more)
+5. Click **"Create"**
+6. Copy the generated authorization code
+
+**Step 3: Authenticate**
 
 ```bash
 zohodesk-cli config auth -a YOUR_AUTHORIZATION_CODE
 ```
 
-**Note:** The authorization code is valid for the duration you specified and can only be used once. If your tokens expire, regenerate a new code and run the auth command again.
-
-Alternatively, you can use environment variables (without authcode):
-
-```bash
-export ZOHO_CLIENT_ID="1000.xxxxx"
-export ZOHO_CLIENT_SECRET="xxxxx"
-export ZOHO_ORG_ID="12345678"
-export ZOHO_REGION="com"  # Optional: com, eu, in, cn, au
-```
+**That's it!** After the initial authentication:
+- Access tokens are automatically refreshed when they expire
+- You only need to re-authenticate if the refresh token expires (rare)
+- Tokens are stored locally in `~/.config/zohodesk-cli/tokens/`
 
 ### 4. Use the CLI
 

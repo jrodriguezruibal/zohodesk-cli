@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.1] - 2026-03-19
+
+### Fixed
+- **Authentication**: Fixed Self-Client OAuth flow for Zoho Desk API
+  - Use `redirect_uri=self` for Self-Client authentication
+  - Add `access_type=offline` to obtain refresh tokens
+  - Remove client_credentials fallback (not supported by Zoho Desk)
+  - Automatic token refresh using refresh tokens
+  - Clear error message when authentication is required
+- **API Response Parsing**: Handle responses with or without `{data: ...}` wrapper
+  - Zoho Desk API returns data directly in some endpoints
+  - Fixed Tickets Get/Create, Comments Add responses
+- **Flag Conflicts**: Changed `--context` shorthand from `-c` to `-C` to avoid conflict with `--config`
+- **Scopes**: Updated to valid Zoho Desk API scopes only
+
+### Added
+- `--contact-id` flag for ticket creation (contacts are required in Zoho Desk API)
+- `unmarshalData` helper function to handle both API response formats
+- `SearchByEmail` method in ContactsService
+
+### Changed
+- Ticket creation now requires `--department` and `--contact-id` (or `--email`)
+- Updated documentation with correct authentication instructions
+- Authentication is now one-time setup with automatic token refresh
+
 ## [0.9.0] - 2026-03-18
 
 ### Added
