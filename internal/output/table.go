@@ -562,8 +562,8 @@ func printArticleTable(article *models.Article) error {
 	if article.CategoryName != "" {
 		fmt.Printf("Category: %s\n", article.CategoryName)
 	}
-	fmt.Printf("Views:    %d\n", article.ViewCount)
-	fmt.Printf("Likes:    %d\n", article.LikeCount)
+	fmt.Printf("Views:    %s\n", article.ViewCount)
+	fmt.Printf("Likes:    %s\n", article.LikeCount)
 	fmt.Printf("Created:  %s\n", article.CreatedTime)
 	if article.ModifiedTime != "" {
 		fmt.Printf("Modified: %s\n", article.ModifiedTime)

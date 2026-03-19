@@ -17,8 +17,8 @@ func TestArticleJSON(t *testing.T) {
 		AuthorName:   "John Doe",
 		Status:       "Published",
 		Tags:         []string{"password", "account"},
-		ViewCount:    100,
-		LikeCount:    10,
+		ViewCount:    "100",
+		LikeCount:    "10",
 		CreatedTime:  "2024-01-15T10:30:00Z",
 	}
 
