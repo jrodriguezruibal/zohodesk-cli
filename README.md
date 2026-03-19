@@ -18,6 +18,7 @@ A command-line interface for Zoho Desk API, designed for both human interaction 
 - **Attachments**: Upload, download, and manage file attachments
 - **Knowledge Base**: Manage articles and categories
 - **Tasks**: Manage tasks with due dates, priorities, and statuses
+- **Reports**: Ticket statistics, agent performance, and SLA compliance
 - **Rate limiting**: Built-in rate limiting for batch operations
 
 ## Installation
@@ -307,6 +308,27 @@ zohodesk-cli tasks complete <task-id>
 
 # Delete task
 zohodesk-cli tasks delete <task-id>
+```
+
+## Reports
+
+Generate statistics and analytics:
+
+```bash
+# Ticket statistics
+zohodesk-cli reports tickets
+
+# Ticket stats by date range
+zohodesk-cli reports tickets --from 2024-01-01 --to 2024-01-31
+
+# Agent performance
+zohodesk-cli reports agents
+
+# SLA compliance
+zohodesk-cli reports sla
+
+# SLA by department
+zohodesk-cli reports sla --department <dept-id>
 ```
 
 ## For AI Agents

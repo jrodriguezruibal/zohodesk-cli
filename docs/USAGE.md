@@ -441,6 +441,56 @@ zohodesk-cli tasks complete 123456789
 zohodesk-cli tasks delete 123456789
 ```
 
+## Reports
+
+### Ticket Statistics
+
+```bash
+# Get ticket statistics
+zohodesk-cli reports tickets
+
+# Filter by date range
+zohodesk-cli reports tickets --from 2024-01-01 --to 2024-01-31
+
+# Filter by department
+zohodesk-cli reports tickets --department 123456789
+
+# JSON output
+zohodesk-cli reports tickets --output json
+```
+
+### Agent Statistics
+
+```bash
+# Get agent performance statistics
+zohodesk-cli reports agents
+
+# Filter by date range
+zohodesk-cli reports agents --from 2024-01-01 --to 2024-01-31
+
+# Filter by specific agent
+zohodesk-cli reports agents --agent 123456789
+
+# JSON output
+zohodesk-cli reports agents --output json
+```
+
+### SLA Statistics
+
+```bash
+# Get SLA compliance statistics
+zohodesk-cli reports sla
+
+# Filter by date range
+zohodesk-cli reports sla --from 2024-01-01 --to 2024-01-31
+
+# Filter by department
+zohodesk-cli reports sla --department 123456789
+
+# JSON output
+zohodesk-cli reports sla --output json
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets

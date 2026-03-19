@@ -705,6 +705,59 @@ zohodesk-cli tasks delete <task-id>
 |----------|-------------|----------|
 | `task-id` | Task ID | Yes |
 
+## Reports Commands
+
+### `zohodesk-cli reports tickets`
+
+Get ticket statistics.
+
+```bash
+zohodesk-cli reports tickets [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--from` | `-f` | From date (YYYY-MM-DD) |
+| `--to` | `-t` | To date (YYYY-MM-DD) |
+| `--department` | `-d` | Filter by department ID |
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli reports agents`
+
+Get agent performance statistics.
+
+```bash
+zohodesk-cli reports agents [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--from` | `-f` | From date (YYYY-MM-DD) |
+| `--to` | `-t` | To date (YYYY-MM-DD) |
+| `--agent` | `-a` | Filter by agent ID |
+| `--output` | `-o` | Output format |
+
+### `zohodesk-cli reports sla`
+
+Get SLA compliance statistics.
+
+```bash
+zohodesk-cli reports sla [flags]
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--from` | `-f` | From date (YYYY-MM-DD) |
+| `--to` | `-t` | To date (YYYY-MM-DD) |
+| `--department` | `-d` | Filter by department ID |
+| `--output` | `-o` | Output format |
+
 ## Output Formats
 
 ### JSON

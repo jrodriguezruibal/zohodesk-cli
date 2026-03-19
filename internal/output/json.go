@@ -265,6 +265,39 @@ func PrintTask(task *models.Task, format string) error {
 	}
 }
 
+func PrintTicketStats(stats *models.TicketStats, format string) error {
+	switch format {
+	case "json":
+		return printJSON(stats)
+	case "yaml":
+		return printYAML(stats)
+	default:
+		return printTicketStatsTable(stats)
+	}
+}
+
+func PrintAgentStats(agents []models.AgentStats, format string) error {
+	switch format {
+	case "json":
+		return printJSON(agents)
+	case "yaml":
+		return printYAML(agents)
+	default:
+		return printAgentStatsTable(agents)
+	}
+}
+
+func PrintSLAStats(stats *models.SLAStats, format string) error {
+	switch format {
+	case "json":
+		return printJSON(stats)
+	case "yaml":
+		return printYAML(stats)
+	default:
+		return printSLAStatsTable(stats)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

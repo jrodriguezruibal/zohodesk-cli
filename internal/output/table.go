@@ -683,3 +683,90 @@ func printTaskTable(task *models.Task) error {
 	}
 	return nil
 }
+
+func printTicketStatsTable(stats *models.TicketStats) error {
+	fmt.Println("\nTicket Statistics")
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Total:       %d\n", stats.Total)
+	fmt.Printf("Open:        %d\n", stats.Open)
+	fmt.Printf("Closed:      %d\n", stats.Closed)
+	fmt.Printf("On Hold:     %d\n", stats.OnHold)
+	fmt.Printf("In Progress: %d\n", stats.InProgress)
+
+	if len(stats.ByStatus) > 0 {
+		fmt.Println("\nBy Status:")
+		table := tablewriter.NewWriter(output)
+		table.SetHeader([]string{"Status", "Count"})
+		table.SetBorder(false)
+		for _, s := range stats.ByStatus {
+			table.Append([]string{s.Status, fmt.Sprintf("%d", s.Count)})
+		}
+		table.Render()
+	}
+
+	if len(stats.ByPriority) > 0 {
+		fmt.Println("\nBy Priority:")
+		table := tablewriter.NewWriter(output)
+		table.SetHeader([]string{"Priority", "Count"})
+		table.SetBorder(false)
+		for _, p := range stats.ByPriority {
+			table.Append([]string{p.Priority, fmt.Sprintf("%d", p.Count)})
+		}
+		table.Render()
+	}
+
+	return nil
+}
+
+func printAgentStatsTable(agents []models.AgentStats) error {
+	if len(agents) == 0 {
+		fmt.Println("No agent statistics found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"Agent", "Assigned", "Resolved", "Avg Response"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+
+	for _, a := range agents {
+		table.Append([]string{
+			a.AgentName,
+			fmt.Sprintf("%d", a.TicketsAssigned),
+			fmt.Sprintf("%d", a.TicketsResolved),
+			a.AvgResponseTime,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal agents: %d\n", len(agents))
+	return nil
+}
+
+func printSLAStatsTable(stats *models.SLAStats) error {
+	fmt.Println("\nSLA Compliance")
+	fmt.Println("─────────────────────────────────────")
+	fmt.Printf("Total Tickets:   %d\n", stats.TotalTickets)
+	fmt.Printf("Complied:        %d\n", stats.Complied)
+	fmt.Printf("Violated:        %d\n", stats.Violated)
+	fmt.Printf("Compliance Rate: %.1f%%\n", stats.ComplianceRate)
+
+	if len(stats.ByPriority) > 0 {
+		fmt.Println("\nBy Priority:")
+		table := tablewriter.NewWriter(output)
+		table.SetHeader([]string{"Priority", "Total", "Complied", "Rate"})
+		table.SetBorder(false)
+		for _, p := range stats.ByPriority {
+			table.Append([]string{
+				p.Priority,
+				fmt.Sprintf("%d", p.Total),
+				fmt.Sprintf("%d", p.Complied),
+				fmt.Sprintf("%.1f%%", p.Rate),
+			})
+		}
+		table.Render()
+	}
+
+	return nil
+}

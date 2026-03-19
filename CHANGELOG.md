@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-03-18
+
+### Added
+- **Reports Commands**: Generate statistics and analytics
+  - `reports tickets` - Ticket statistics (by status, priority, department)
+  - `reports agents` - Agent performance statistics
+  - `reports sla` - SLA compliance statistics
+- New models: TicketStats, AgentStats, SLAStats
+- New service: ReportsService
+- Output formatters for reports (tables with statistics)
+- Date range filtering for all reports
+
+### Changed
+- Updated documentation (USAGE.md, API.md, README.md)
+
 ## [0.6.0] - 2026-03-18
 
 ### Added
