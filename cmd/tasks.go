@@ -86,14 +86,14 @@ func init() {
 	tasksCreateCmd.Flags().StringVarP(&flagTaskTitle, "title", "t", "", "task title (required)")
 	tasksCreateCmd.Flags().StringVarP(&flagTaskDescription, "description", "d", "", "task description")
 	tasksCreateCmd.Flags().StringVarP(&flagTaskPriority, "priority", "P", "", "task priority")
-	tasksCreateCmd.Flags().StringVarP(&flagTaskOwner, "owner", "o", "", "owner ID")
+	tasksCreateCmd.Flags().StringVar(&flagTaskOwner, "owner", "", "owner ID")
 	tasksCreateCmd.Flags().StringVarP(&flagTaskDueDate, "due", "D", "", "due date (YYYY-MM-DD)")
 	tasksCreateCmd.Flags().StringVarP(&flagTaskTicketID, "ticket", "T", "", "associated ticket ID")
 
 	tasksUpdateCmd.Flags().StringVarP(&flagTaskTitle, "title", "t", "", "task title")
 	tasksUpdateCmd.Flags().StringVarP(&flagTaskDescription, "description", "d", "", "task description")
 	tasksUpdateCmd.Flags().StringVarP(&flagTaskPriority, "priority", "P", "", "task priority")
-	tasksUpdateCmd.Flags().StringVarP(&flagTaskOwner, "owner", "o", "", "owner ID")
+	tasksUpdateCmd.Flags().StringVar(&flagTaskOwner, "owner", "", "owner ID")
 	tasksUpdateCmd.Flags().StringVarP(&flagTaskDueDate, "due", "D", "", "due date (YYYY-MM-DD)")
 	tasksUpdateCmd.Flags().StringVarP(&flagTaskStatus, "status", "s", "", "task status")
 }
