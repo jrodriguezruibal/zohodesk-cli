@@ -571,6 +571,61 @@ zohodesk-cli accounts update 123456789 --type "Partner" --output json
 zohodesk-cli accounts delete 123456789
 ```
 
+## Tags
+
+### List Tags
+
+```bash
+# List tags on a ticket
+zohodesk-cli tickets tags list 123456789
+
+# JSON output
+zohodesk-cli tickets tags list 123456789 --output json
+```
+
+### Add Tags
+
+```bash
+# Add multiple tags
+zohodesk-cli tickets tags add 123456789 --tag urgent --tag bug --tag customer
+
+# JSON output
+zohodesk-cli tickets tags add 123456789 --tag urgent --output json
+```
+
+### Remove Tag
+
+```bash
+# Remove a specific tag
+zohodesk-cli tickets tags remove 123456789 urgent
+```
+
+## Ticket Operations
+
+### Merge Tickets
+
+```bash
+# Merge source ticket into target ticket
+zohodesk-cli tickets merge 123456789 987654321
+```
+
+### Follow/Unfollow Tickets
+
+```bash
+# Follow a ticket (receive notifications)
+zohodesk-cli tickets follow 123456789
+
+# Stop following a ticket
+zohodesk-cli tickets unfollow 123456789
+```
+
+### Update with Custom Fields
+
+```bash
+# Update ticket with custom fields
+zohodesk-cli tickets update 123456789 --custom-fields '{"priority_level": "high", "customer_type": "enterprise"}'
+```
+
 ## Batch Operations
 
 ### Create Multiple Tickets

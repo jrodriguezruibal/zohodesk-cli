@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-03-18
+
+### Added
+- **Tags Commands**: Manage tags on tickets
+  - `tickets tags list <ticket-id>` - List tags on a ticket
+  - `tickets tags add <ticket-id> --tag <tag>` - Add tags to a ticket
+  - `tickets tags remove <ticket-id> <tag>` - Remove a tag from a ticket
+- **Ticket Merge**: Merge duplicate tickets
+  - `tickets merge <source-id> <target-id>` - Merge source into target
+- **Ticket Follow/Unfollow**: Follow ticket updates
+  - `tickets follow <ticket-id>` - Start following a ticket
+  - `tickets unfollow <ticket-id>` - Stop following a ticket
+- **Custom Fields Support**: Update ticket custom fields
+  - `tickets update <id> --custom-fields '{"field": "value'}'`
+- Tags field in Ticket model
+- CustomFields field in Ticket and TicketUpdateRequest models
+- New models: Tag, TagListResponse, TicketTagsRequest, TicketMergeRequest, FollowRequest
+- New service: TagsService
+
+### Changed
+- Updated documentation (USAGE.md, API.md, README.md)
+
 ## [0.8.0] - 2026-03-18
 
 ### Added

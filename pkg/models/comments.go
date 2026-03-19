@@ -64,16 +64,3 @@ type BatchResponse struct {
 	Results   []BatchResult `json:"results"`
 	Errors    []string      `json:"errors,omitempty"`
 }
-
-type Tag struct {
-	ID   string `json:"id" yaml:"id"`
-	Name string `json:"name" yaml:"name"`
-}
-
-type TagListResponse struct {
-	Data []Tag `json:"data"`
-}
-
-type TicketTagRequest struct {
-	Tags []string `json:"tags"`
-}

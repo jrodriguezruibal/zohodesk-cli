@@ -342,6 +342,17 @@ func PrintAccount(account *models.Account, format string) error {
 	}
 }
 
+func PrintTags(tags []models.Tag, format string) error {
+	switch format {
+	case "json":
+		return printJSON(tags)
+	case "yaml":
+		return printYAML(tags)
+	default:
+		return printTagsTable(tags)
+	}
+}
+
 func printJSON(v interface{}) error {
 	encoder := json.NewEncoder(output)
 	encoder.SetIndent("", "  ")

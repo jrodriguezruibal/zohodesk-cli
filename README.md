@@ -365,6 +365,35 @@ zohodesk-cli accounts update <account-id> --type "Customer"
 zohodesk-cli accounts delete <account-id>
 ```
 
+## Tags
+
+Manage tags on tickets:
+
+```bash
+# List tags on a ticket
+zohodesk-cli tickets tags list <ticket-id>
+
+# Add tags
+zohodesk-cli tickets tags add <ticket-id> --tag urgent --tag bug
+
+# Remove tag
+zohodesk-cli tickets tags remove <ticket-id> urgent
+```
+
+## Ticket Operations
+
+```bash
+# Merge tickets
+zohodesk-cli tickets merge <source-id> <target-id>
+
+# Follow/unfollow tickets
+zohodesk-cli tickets follow <ticket-id>
+zohodesk-cli tickets unfollow <ticket-id>
+
+# Update with custom fields
+zohodesk-cli tickets update <ticket-id> --custom-fields '{"field": "value"}'
+```
+
 ## For AI Agents
 
 This CLI is designed to be used by AI agents (Claude, GPT, etc.):

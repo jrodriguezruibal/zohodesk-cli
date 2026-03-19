@@ -125,6 +125,24 @@ func (s *TicketsService) Assign(ctx context.Context, ticketID string, agentID st
 	return s.Update(ctx, ticketID, req)
 }
 
+func (s *TicketsService) Merge(ctx context.Context, sourceID string, targetID string) error {
+	req := models.TicketMergeRequest{
+		TargetTicketID: targetID,
+	}
+	_, err := s.client.Post(ctx, "/tickets/"+sourceID+"/merge", req)
+	return err
+}
+
+func (s *TicketsService) Follow(ctx context.Context, ticketID string) error {
+	req := models.FollowRequest{Follow: true}
+	_, err := s.client.Post(ctx, "/tickets/"+ticketID+"/follow", req)
+	return err
+}
+
+func (s *TicketsService) Unfollow(ctx context.Context, ticketID string) error {
+	return s.client.Delete(ctx, "/tickets/"+ticketID+"/follow")
+}
+
 func (s *TicketsService) Create(ctx context.Context, req models.TicketCreateRequest) (*models.Ticket, error) {
 	if req.Email != "" && req.ContactID == "" {
 		req.Email = ""

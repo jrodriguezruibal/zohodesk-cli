@@ -890,3 +890,30 @@ func printAccountTable(account *models.Account) error {
 	fmt.Printf("Created: %s\n", account.CreatedTime)
 	return nil
 }
+
+func printTagsTable(tags []models.Tag) error {
+	if len(tags) == 0 {
+		fmt.Println("No tags found")
+		return nil
+	}
+
+	table := tablewriter.NewWriter(output)
+	table.SetHeader([]string{"ID", "Name"})
+	table.SetBorder(false)
+	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetCenterSeparator("")
+	table.SetColumnSeparator("")
+	table.SetRowSeparator("")
+
+	for _, t := range tags {
+		table.Append([]string{
+			t.ID,
+			t.Name,
+		})
+	}
+
+	table.Render()
+	fmt.Printf("\nTotal: %d tags\n", len(tags))
+	return nil
+}

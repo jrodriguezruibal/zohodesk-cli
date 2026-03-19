@@ -1,26 +1,28 @@
 package models
 
 type Ticket struct {
-	ID                string `json:"id" yaml:"id"`
-	TicketNumber      string `json:"ticketNumber" yaml:"ticketNumber"`
-	Subject           string `json:"subject" yaml:"subject"`
-	Description       string `json:"description" yaml:"description"`
-	Status            string `json:"status" yaml:"status"`
-	Priority          string `json:"priority" yaml:"priority"`
-	DepartmentID      string `json:"departmentId,omitempty" yaml:"departmentId,omitempty"`
-	DepartmentName    string `json:"departmentName,omitempty" yaml:"departmentName,omitempty"`
-	ContactID         string `json:"contactId,omitempty" yaml:"contactId,omitempty"`
-	ContactName       string `json:"contactName,omitempty" yaml:"contactName,omitempty"`
-	ContactEmail      string `json:"contactEmail,omitempty" yaml:"contactEmail,omitempty"`
-	AssigneeID        string `json:"assigneeId,omitempty" yaml:"assigneeId,omitempty"`
-	AssigneeName      string `json:"assigneeName,omitempty" yaml:"assigneeName,omitempty"`
-	CreatedTime       string `json:"createdTime" yaml:"createdTime"`
-	ModifiedTime      string `json:"modifiedTime" yaml:"modifiedTime"`
-	DueDate           string `json:"dueDate,omitempty" yaml:"dueDate,omitempty"`
-	Classification    string `json:"classification,omitempty" yaml:"classification,omitempty"`
-	ClosedTime        string `json:"closedTime,omitempty" yaml:"closedTime,omitempty"`
-	Resolution        string `json:"resolution,omitempty" yaml:"resolution,omitempty"`
-	WebURL            string `json:"webUrl,omitempty" yaml:"webUrl,omitempty"`
+	ID                string                 `json:"id" yaml:"id"`
+	TicketNumber      string                 `json:"ticketNumber" yaml:"ticketNumber"`
+	Subject           string                 `json:"subject" yaml:"subject"`
+	Description       string                 `json:"description" yaml:"description"`
+	Status            string                 `json:"status" yaml:"status"`
+	Priority          string                 `json:"priority" yaml:"priority"`
+	DepartmentID      string                 `json:"departmentId,omitempty" yaml:"departmentId,omitempty"`
+	DepartmentName    string                 `json:"departmentName,omitempty" yaml:"departmentName,omitempty"`
+	ContactID         string                 `json:"contactId,omitempty" yaml:"contactId,omitempty"`
+	ContactName       string                 `json:"contactName,omitempty" yaml:"contactName,omitempty"`
+	ContactEmail      string                 `json:"contactEmail,omitempty" yaml:"contactEmail,omitempty"`
+	AssigneeID        string                 `json:"assigneeId,omitempty" yaml:"assigneeId,omitempty"`
+	AssigneeName      string                 `json:"assigneeName,omitempty" yaml:"assigneeName,omitempty"`
+	CreatedTime       string                 `json:"createdTime" yaml:"createdTime"`
+	ModifiedTime      string                 `json:"modifiedTime" yaml:"modifiedTime"`
+	DueDate           string                 `json:"dueDate,omitempty" yaml:"dueDate,omitempty"`
+	Classification    string                 `json:"classification,omitempty" yaml:"classification,omitempty"`
+	ClosedTime        string                 `json:"closedTime,omitempty" yaml:"closedTime,omitempty"`
+	Resolution        string                 `json:"resolution,omitempty" yaml:"resolution,omitempty"`
+	WebURL            string                 `json:"webUrl,omitempty" yaml:"webUrl,omitempty"`
+	Tags              []string               `json:"tags,omitempty" yaml:"tags,omitempty"`
+	CustomFields      map[string]interface{} `json:"customFields,omitempty" yaml:"customFields,omitempty"`
 }
 
 type TicketListResponse struct {
@@ -38,11 +40,13 @@ type TicketCreateRequest struct {
 }
 
 type TicketUpdateRequest struct {
-	Status       string `json:"status,omitempty"`
-	Priority     string `json:"priority,omitempty"`
-	AssigneeID   string `json:"assigneeId,omitempty"`
-	DepartmentID string `json:"departmentId,omitempty"`
-	Resolution   string `json:"resolution,omitempty"`
+	Status        string                 `json:"status,omitempty"`
+	Priority      string                 `json:"priority,omitempty"`
+	AssigneeID    string                 `json:"assigneeId,omitempty"`
+	DepartmentID  string                 `json:"departmentId,omitempty"`
+	Resolution    string                 `json:"resolution,omitempty"`
+	Tags          []string               `json:"tags,omitempty"`
+	CustomFields  map[string]interface{} `json:"customFields,omitempty"`
 }
 
 type Contact struct {

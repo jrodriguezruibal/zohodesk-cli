@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/jrodriguezruibal/zohodesk-cli/internal/api"
@@ -70,6 +71,30 @@ var ticketsAssignCmd = &cobra.Command{
 	RunE:  runTicketsAssign,
 }
 
+var ticketsMergeCmd = &cobra.Command{
+	Use:   "merge <source-id> <target-id>",
+	Short: "Merge tickets",
+	Long:  `Merge a source ticket into a target ticket.`,
+	Args:  cobra.ExactArgs(2),
+	RunE:  runTicketsMerge,
+}
+
+var ticketsFollowCmd = &cobra.Command{
+	Use:   "follow <ticket-id>",
+	Short: "Follow a ticket",
+	Long:  `Follow a ticket to receive notifications.`,
+	Args:  cobra.ExactArgs(1),
+	RunE:  runTicketsFollow,
+}
+
+var ticketsUnfollowCmd = &cobra.Command{
+	Use:   "unfollow <ticket-id>",
+	Short: "Unfollow a ticket",
+	Long:  `Stop following a ticket.`,
+	Args:  cobra.ExactArgs(1),
+	RunE:  runTicketsUnfollow,
+}
+
 var (
 	flagStatus      string
 	flagPriority    string
@@ -87,6 +112,7 @@ var (
 	flagBatchFile   string
 	flagContext     bool
 	flagAssignee    string
+	flagCustomFields string
 )
 
 func init() {
@@ -98,6 +124,9 @@ func init() {
 	ticketsCmd.AddCommand(ticketsCloseCmd)
 	ticketsCmd.AddCommand(ticketsSearchCmd)
 	ticketsCmd.AddCommand(ticketsAssignCmd)
+	ticketsCmd.AddCommand(ticketsMergeCmd)
+	ticketsCmd.AddCommand(ticketsFollowCmd)
+	ticketsCmd.AddCommand(ticketsUnfollowCmd)
 
 	ticketsListCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "filter by status (Open, Closed, On Hold)")
 	ticketsListCmd.Flags().StringVarP(&flagPriority, "priority", "P", "", "filter by priority (Low, Medium, High)")
@@ -118,6 +147,7 @@ func init() {
 	ticketsUpdateCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "new status")
 	ticketsUpdateCmd.Flags().StringVarP(&flagPriority, "priority", "P", "", "new priority")
 	ticketsUpdateCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
+	ticketsUpdateCmd.Flags().StringVarP(&flagCustomFields, "custom-fields", "C", "", "custom fields as JSON")
 	ticketsUpdateCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
 	ticketsUpdateCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
 
@@ -280,6 +310,13 @@ func runTicketsUpdate(cmd *cobra.Command, args []string) error {
 	if flagResolution != "" {
 		req.Resolution = flagResolution
 	}
+	if flagCustomFields != "" {
+		var customFields map[string]interface{}
+		if err := json.Unmarshal([]byte(flagCustomFields), &customFields); err != nil {
+			return fmt.Errorf("invalid custom fields JSON: %w", err)
+		}
+		req.CustomFields = customFields
+	}
 
 	ticket, err := api.NewTicketsService(client).Update(context.Background(), ticketID, req)
 	if err != nil {
@@ -358,4 +395,68 @@ func runTicketsAssign(cmd *cobra.Command, args []string) error {
 
 	out := getOutputFormat()
 	return output.PrintTicket(ticket, out)
+}
+
+func runTicketsMerge(cmd *cobra.Command, args []string) error {
+	client, _, err := newClient()
+	if err != nil {
+		return err
+	}
+
+	sourceID := args[0]
+	targetID := args[1]
+
+	if err := api.NewTicketsService(client).Merge(context.Background(), sourceID, targetID); err != nil {
+		return fmt.Errorf("failed to merge tickets: %w", err)
+	}
+
+	out := getOutputFormat()
+	if out == "json" {
+		fmt.Printf(`{"status": "success", "sourceId": "%s", "targetId": "%s", "message": "Tickets merged successfully"}`, sourceID, targetID)
+	} else {
+		fmt.Printf("Ticket %s merged into %s successfully\n", sourceID, targetID)
+	}
+	return nil
+}
+
+func runTicketsFollow(cmd *cobra.Command, args []string) error {
+	client, _, err := newClient()
+	if err != nil {
+		return err
+	}
+
+	ticketID := args[0]
+
+	if err := api.NewTicketsService(client).Follow(context.Background(), ticketID); err != nil {
+		return fmt.Errorf("failed to follow ticket: %w", err)
+	}
+
+	out := getOutputFormat()
+	if out == "json" {
+		fmt.Printf(`{"status": "success", "ticketId": "%s", "message": "Now following ticket"}`, ticketID)
+	} else {
+		fmt.Printf("Now following ticket %s\n", ticketID)
+	}
+	return nil
+}
+
+func runTicketsUnfollow(cmd *cobra.Command, args []string) error {
+	client, _, err := newClient()
+	if err != nil {
+		return err
+	}
+
+	ticketID := args[0]
+
+	if err := api.NewTicketsService(client).Unfollow(context.Background(), ticketID); err != nil {
+		return fmt.Errorf("failed to unfollow ticket: %w", err)
+	}
+
+	out := getOutputFormat()
+	if out == "json" {
+		fmt.Printf(`{"status": "success", "ticketId": "%s", "message": "Stopped following ticket"}`, ticketID)
+	} else {
+		fmt.Printf("Stopped following ticket %s\n", ticketID)
+	}
+	return nil
 }

@@ -890,6 +890,116 @@ zohodesk-cli accounts delete <account-id>
 |----------|-------------|----------|
 | `account-id` | Account ID | Yes |
 
+## Tags Commands
+
+### `zohodesk-cli tickets tags list`
+
+List tags on a ticket.
+
+```bash
+zohodesk-cli tickets tags list <ticket-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+### `zohodesk-cli tickets tags add`
+
+Add tags to a ticket.
+
+```bash
+zohodesk-cli tickets tags add <ticket-id> [flags]
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--tag` | `-t` | Tag to add (can be specified multiple times) |
+
+### `zohodesk-cli tickets tags remove`
+
+Remove a tag from a ticket.
+
+```bash
+zohodesk-cli tickets tags remove <ticket-id> <tag>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+| `tag` | Tag name | Yes |
+
+## Ticket Operations Commands
+
+### `zohodesk-cli tickets merge`
+
+Merge a source ticket into a target ticket.
+
+```bash
+zohodesk-cli tickets merge <source-id> <target-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `source-id` | Source ticket ID | Yes |
+| `target-id` | Target ticket ID | Yes |
+
+### `zohodesk-cli tickets follow`
+
+Follow a ticket to receive notifications.
+
+```bash
+zohodesk-cli tickets follow <ticket-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+### `zohodesk-cli tickets unfollow`
+
+Stop following a ticket.
+
+```bash
+zohodesk-cli tickets unfollow <ticket-id>
+```
+
+**Arguments:**
+
+| Argument | Description | Required |
+|----------|-------------|----------|
+| `ticket-id` | Ticket ID | Yes |
+
+### `zohodesk-cli tickets update` (with custom fields)
+
+Update ticket with custom fields.
+
+```bash
+zohodesk-cli tickets update <ticket-id> --custom-fields '{"field1": "value1"}'
+```
+
+**Flags:**
+
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--custom-fields` | `-C` | Custom fields as JSON string |
+
 ## Output Formats
 
 ### JSON
