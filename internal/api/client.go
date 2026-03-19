@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 	"time"
 
 	"github.com/jrodriguezruibal/zohodesk-cli/internal/config"
@@ -134,7 +135,7 @@ func (c *Client) parseResponse(resp *http.Response, v interface{}) error {
 		return fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	if resp.StatusCode >=400 {
+	if resp.StatusCode >= 400 {
 		var apiErr models.APIError
 		if err := json.Unmarshal(body, &apiErr); err == nil {
 			return fmt.Errorf("API error (%d): %s - %s", resp.StatusCode, apiErr.Code, apiErr.Message)
@@ -144,6 +145,33 @@ func (c *Client) parseResponse(resp *http.Response, v interface{}) error {
 
 	if err := json.Unmarshal(body, v); err != nil {
 		return fmt.Errorf("failed to parse response: %w", err)
+	}
+
+	return nil
+}
+
+// unmarshalData unmarshals a response that may be wrapped in {"data": ...} or direct
+func unmarshalData(data []byte, v interface{}) error {
+	if err := json.Unmarshal(data, v); err != nil {
+		return err
+	}
+
+	reflectValue := reflect.ValueOf(v)
+	if reflectValue.Kind() == reflect.Ptr && !reflectValue.IsNil() {
+		elem := reflectValue.Elem()
+		if elem.Kind() == reflect.Struct {
+			idField := elem.FieldByName("ID")
+			if idField.IsValid() && idField.String() != "" {
+				return nil
+			}
+		}
+	}
+
+	var wrapped struct {
+		Data json.RawMessage `json:"data"`
+	}
+	if err := json.Unmarshal(data, &wrapped); err == nil && len(wrapped.Data) > 0 {
+		return json.Unmarshal(wrapped.Data, v)
 	}
 
 	return nil
