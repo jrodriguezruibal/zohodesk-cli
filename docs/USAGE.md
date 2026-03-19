@@ -1,5 +1,37 @@
 # Usage Examples
 
+## Authentication (Self-Client OAuth)
+
+For Zoho Desk Self-Client authentication, you need to generate and exchange an authorization code:
+
+### Step 1: Generate Authorization Code
+
+1. Go to [Zoho API Console](https://api-console.zoho.com)
+2. Select your **Self-Client**
+3. Go to **"Generate Code"** tab
+4. Enter scopes (separated by commas):
+   ```
+   Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.articles.ALL,Desk.tasks.ALL,Desk.timetracker.ALL,Desk.accounts.ALL,Desk.products.READ,Desk.setup.READ
+   ```
+5. Set duration (e.g., 10 mins)
+6. Click **"Create"**
+7. Copy the generated code
+
+### Step 2: Initialize Configuration
+
+```bash
+# Interactive setup
+zohodesk-cli config init
+```
+
+### Step 3: Exchange Code for Tokens
+
+```bash
+zohodesk-cli config auth -a YOUR_AUTHORIZATION_CODE
+```
+
+Once authenticated, the tokens are cached locally. If the access token expires, it will be automatically refreshed using the refresh token. If both tokens expire, generate a new authorization code and run the auth command again.
+
 ## Global Flags
 
 | Flag | Short | Description |

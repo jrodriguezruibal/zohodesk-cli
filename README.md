@@ -73,15 +73,37 @@ go install github.com/jrodriguezruibal/zohodesk-cli@latest
 ```bash
 # Interactive setup (recommended)
 zohodesk-cli config init
+```
 
-# Or set environment variables for CI/CD
+### 3. Authenticate (Self-Client OAuth)
+
+For Self-Client, you need to generate an authorization code and exchange it for tokens:
+
+1. Go to [Zoho API Console](https://api-console.zoho.com)
+2. Select your **Self-Client**
+3. Go to **"Generate Code"** tab
+4. Enter scopes: `Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.articles.ALL,Desk.tasks.ALL,Desk.timetracker.ALL,Desk.accounts.ALL,Desk.products.READ,Desk.setup.READ`
+5. Set duration (e.g., 10 mins)
+6. Click **"Create"**
+7. Copy the generated code
+8. Exchange the code for tokens:
+
+```bash
+zohodesk-cli config auth -a YOUR_AUTHORIZATION_CODE
+```
+
+**Note:** The authorization code is valid for the duration you specified and can only be used once. If your tokens expire, regenerate a new code and run the auth command again.
+
+Alternatively, you can use environment variables (without authcode):
+
+```bash
 export ZOHO_CLIENT_ID="1000.xxxxx"
 export ZOHO_CLIENT_SECRET="xxxxx"
 export ZOHO_ORG_ID="12345678"
 export ZOHO_REGION="com"  # Optional: com, eu, in, cn, au
 ```
 
-### 3. Use the CLI
+### 4. Use the CLI
 
 ```bash
 # List tickets
