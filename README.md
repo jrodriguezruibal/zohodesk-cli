@@ -133,12 +133,9 @@ zohodesk-cli tags add TICKET_ID --tag urgent --tag bug
 zohodesk-cli tags list TICKET_ID
 ```
 
-### Working with Departments & Agents
+### Working with Agents
 
 ```bash
-# List departments
-zohodesk-cli departments list
-
 # List agents
 zohodesk-cli agents list
 
@@ -217,7 +214,6 @@ zohodesk-cli tickets list --output yaml
 | `comments` | Add notes and replies to tickets |
 | `tags` | Manage ticket tags |
 | `contacts` | List and search contacts |
-| `departments` | List departments |
 | `agents` | List support agents |
 | `articles` | Knowledge base articles |
 | `tasks` | Task management |
@@ -275,14 +271,13 @@ Example context for AI agents:
 The zohodesk-cli tool provides complete access to Zoho Desk API. 
 
 To create a ticket, you need:
-1. A department ID (get with `zohodesk-cli departments list`)
+1. A department ID (find in Zoho Desk settings or use a known ID)
 2. A contact ID (search with `zohodesk-cli contacts search --email EMAIL`)
 
 Example workflow:
 1. Search for contact: zohodesk-cli contacts search --email user@example.com --output json
 2. Extract contactId from response
-3. Get department: zohodesk-cli departments list --output json
-4. Create ticket with required IDs
+3. Create ticket with required IDs: zohodesk-cli tickets create --subject "Issue" --department DEPT_ID --contact-id CONTACT_ID
 ```
 
 ## Troubleshooting
@@ -305,13 +300,10 @@ The authorization code has expired (valid for 10 minutes). Generate a new code i
 **Ticket creation requires department and contact:**
 
 ```bash
-# Find department ID
-zohodesk-cli departments list --output json
-
 # Find or search contact
 zohodesk-cli contacts search --email user@example.com --output json
 
-# Create ticket with IDs
+# Create ticket with IDs (department ID can be found in Zoho Desk settings)
 zohodesk-cli tickets create \
   --subject "Issue" \
   --department DEPT_ID \

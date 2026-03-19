@@ -191,28 +191,6 @@ zohodesk-cli tickets search \
 zohodesk-cli tickets search --email user@example.com --output json
 ```
 
-## Departments
-
-### List Departments
-
-```bash
-# List all departments
-zohodesk-cli departments list
-
-# JSON output
-zohodesk-cli departments list --output json
-```
-
-### Get Department
-
-```bash
-# Department details
-zohodesk-cli departments get 123456789
-
-# JSON output
-zohodesk-cli departments get 123456789 --output json
-```
-
 ## Agents
 
 ### List Agents

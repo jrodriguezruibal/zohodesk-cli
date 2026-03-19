@@ -106,14 +106,6 @@ func (s *TicketsService) GetWithContext(ctx context.Context, ticketID string) (*
 		context.ThreadCount = len(context.Threads)
 	}
 
-	// Get department
-	if ticket.DepartmentID != "" {
-		dept, err := NewDepartmentsService(s.client).Get(ctx, ticket.DepartmentID)
-		if err == nil {
-			context.Department = dept
-		}
-	}
-
 	// Get assignee
 	if ticket.AssigneeID != "" {
 		agent, err := NewAgentsService(s.client).Get(ctx, ticket.AssigneeID)

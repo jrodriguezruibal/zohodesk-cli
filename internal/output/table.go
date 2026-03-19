@@ -209,49 +209,6 @@ func printBatchResultJSON(result *models.BatchResponse) error {
 	return printJSON(result)
 }
 
-func printDepartmentsTable(departments []models.Department) error {
-	if len(departments) == 0 {
-		fmt.Println("No departments found")
-		return nil
-	}
-
-	table := tablewriter.NewWriter(output)
-	table.SetHeader([]string{"ID", "Name", "Visible"})
-	table.SetBorder(false)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-	table.SetCenterSeparator("")
-	table.SetColumnSeparator("")
-	table.SetRowSeparator("")
-
-	for _, d := range departments {
-		visible := "No"
-		if d.IsVisible {
-			visible = "Yes"
-		}
-		table.Append([]string{
-			d.ID,
-			d.Name,
-			visible,
-		})
-	}
-
-	table.Render()
-	fmt.Printf("\nTotal: %d departments\n", len(departments))
-	return nil
-}
-
-func printDepartmentTable(department *models.Department) error {
-	fmt.Printf("\nDepartment: %s\n", department.ID)
-	fmt.Println("─────────────────────────────────────")
-	fmt.Printf("Name:        %s\n", department.Name)
-	if department.Description != "" {
-		fmt.Printf("Description: %s\n", department.Description)
-	}
-	fmt.Printf("Visible:     %v\n", department.IsVisible)
-	return nil
-}
-
 func printAgentsTable(agents []models.Agent) error {
 	if len(agents) == 0 {
 		fmt.Println("No agents found")
