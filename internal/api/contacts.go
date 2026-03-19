@@ -78,3 +78,16 @@ func (s *ContactsService) Search(ctx context.Context, email string, name string)
 
 	return filtered, nil
 }
+
+func (s *ContactsService) SearchByEmail(ctx context.Context, email string) (*models.Contact, error) {
+	contacts, err := s.Search(ctx, email, "")
+	if err != nil {
+		return nil, err
+	}
+
+	if len(contacts) == 0 {
+		return nil, nil
+	}
+
+	return &contacts[0], nil
+}

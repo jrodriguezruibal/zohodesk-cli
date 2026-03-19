@@ -67,24 +67,7 @@ func (c *Client) ensureToken(ctx context.Context) error {
 		}
 	}
 
-	token, err := auth.GetAccessToken(ctx)
-	if err != nil {
-		return fmt.Errorf("failed to get access token: %w", err)
-	}
-
-	cache = &config.TokenCache{
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-		ExpiresAt:    token.ExpiresAt,
-		OrgID:        c.config.OrgID,
-	}
-
-	if err := config.SaveTokenCache(c.profileName, cache); err != nil {
-		return fmt.Errorf("failed to save token cache: %w", err)
-	}
-
-	c.tokenCache = cache
-	return nil
+	return fmt.Errorf("no valid authentication token found. Please run 'zohodesk-cli config auth -a <authorization_code>' to authenticate. Generate a code at https://api-console.zoho.com")
 }
 
 func (c *Client) doRequest(ctx context.Context, method, endpoint string, params url.Values, body interface{}) (*http.Response, error) {

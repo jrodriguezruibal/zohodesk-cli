@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/url"
 
 	"github.com/jrodriguezruibal/zohodesk-cli/pkg/models"
@@ -144,23 +145,26 @@ func (s *TicketsService) Unfollow(ctx context.Context, ticketID string) error {
 }
 
 func (s *TicketsService) Create(ctx context.Context, req models.TicketCreateRequest) (*models.Ticket, error) {
-	if req.Email != "" && req.ContactID == "" {
-		req.Email = ""
-	}
-
 	data, err := s.client.Post(ctx, "/tickets", req)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp struct {
-		Data models.Ticket `json:"data"`
-	}
-	if err := json.Unmarshal(data, &resp); err != nil {
-		return nil, err
+	var ticket models.Ticket
+	if err := json.Unmarshal(data, &ticket); err != nil {
+		return nil, fmt.Errorf("failed to parse ticket response: %w", err)
 	}
 
-	return &resp.Data, nil
+	if ticket.ID == "" {
+		var resp struct {
+			Data models.Ticket `json:"data"`
+		}
+		if err := json.Unmarshal(data, &resp); err == nil && resp.Data.ID != "" {
+			return &resp.Data, nil
+		}
+	}
+
+	return &ticket, nil
 }
 
 func (s *TicketsService) Update(ctx context.Context, ticketID string, req models.TicketUpdateRequest) (*models.Ticket, error) {

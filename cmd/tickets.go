@@ -102,6 +102,7 @@ var (
 	flagSubject     string
 	flagDescription string
 	flagEmail       string
+	flagContactID string
 	flagDepartment  string
 	flagResolution  string
 	flagFull        bool
@@ -133,13 +134,14 @@ func init() {
 	ticketsListCmd.Flags().IntVarP(&flagLimit, "limit", "l", 50, "maximum number of tickets to return")
 
 	ticketsGetCmd.Flags().BoolVarP(&flagFull, "full", "f", false, "show full ticket with threads and contact")
-	ticketsGetCmd.Flags().BoolVarP(&flagContext, "context", "c", false, "show ticket with full context (department, assignee, SLA)")
+	ticketsGetCmd.Flags().BoolVarP(&flagContext, "context", "C", false, "show ticket with full context (department, assignee, SLA)")
 
 	ticketsCreateCmd.Flags().StringVarP(&flagSubject, "subject", "s", "", "ticket subject (required)")
 	ticketsCreateCmd.Flags().StringVarP(&flagDescription, "description", "d", "", "ticket description")
-	ticketsCreateCmd.Flags().StringVarP(&flagEmail, "email", "e", "", "contact email (required)")
+	ticketsCreateCmd.Flags().StringVarP(&flagEmail, "email", "e", "", "contact email")
+	ticketsCreateCmd.Flags().StringVar(&flagContactID, "contact-id", "", "contact ID")
 	ticketsCreateCmd.Flags().StringVarP(&flagPriority, "priority", "P", "Medium", "ticket priority (Low, Medium, High)")
-	ticketsCreateCmd.Flags().StringVarP(&flagDepartment, "department", "D", "", "department ID")
+	ticketsCreateCmd.Flags().StringVarP(&flagDepartment, "department", "D", "", "department ID (required)")
 	ticketsCreateCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
 	ticketsCreateCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
 	ticketsCreateCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
@@ -147,7 +149,7 @@ func init() {
 	ticketsUpdateCmd.Flags().StringVarP(&flagStatus, "status", "s", "", "new status")
 	ticketsUpdateCmd.Flags().StringVarP(&flagPriority, "priority", "P", "", "new priority")
 	ticketsUpdateCmd.Flags().StringVarP(&flagResolution, "resolution", "r", "", "resolution message")
-	ticketsUpdateCmd.Flags().StringVarP(&flagCustomFields, "custom-fields", "C", "", "custom fields as JSON")
+	ticketsUpdateCmd.Flags().StringVarP(&flagCustomFields, "custom-fields", "", "", "custom fields as JSON")
 	ticketsUpdateCmd.Flags().BoolVarP(&flagBatch, "batch", "b", false, "read batch input from stdin (JSON array)")
 	ticketsUpdateCmd.Flags().StringVarP(&flagBatchFile, "file", "f", "", "read batch input from file (JSON array)")
 
@@ -271,8 +273,29 @@ func runTicketsCreate(cmd *cobra.Command, args []string) error {
 		Priority:    flagPriority,
 	}
 
+	if flagContactID != "" {
+		req.ContactID = flagContactID
+	} else if flagEmail != "" {
+		contact, err := api.NewContactsService(client).SearchByEmail(context.Background(), flagEmail)
+		if err != nil {
+			return fmt.Errorf("failed to find contact by email: %w", err)
+		}
+		if contact == nil {
+			return fmt.Errorf("no contact found with email '%s'. Please provide --contact-id or create the contact first", flagEmail)
+		}
+		req.ContactID = contact.ID
+	}
+
 	if flagDepartment != "" {
 		req.DepartmentID = flagDepartment
+	}
+
+	if req.DepartmentID == "" {
+		return fmt.Errorf("department ID is required. Use --department flag")
+	}
+
+	if req.ContactID == "" {
+		return fmt.Errorf("contact ID is required. Use --contact-id flag or --email to search for a contact")
 	}
 
 	ticket, err := api.NewTicketsService(client).Create(context.Background(), req)

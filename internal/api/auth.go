@@ -33,7 +33,7 @@ func (a *Auth) ExchangeCode(ctx context.Context, code string) (*TokenResponse, e
 	data.Set("client_id", a.config.ClientID)
 	data.Set("client_secret", a.config.ClientSecret)
 	data.Set("code", code)
-	data.Set("redirect_uri", "https://www.zoho.com")
+	data.Set("redirect_uri", "self")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, nil)
 	if err != nil {
@@ -88,6 +88,7 @@ func (a *Auth) RefreshToken(ctx context.Context, refreshToken string) (*TokenRes
 	data.Set("client_id", a.config.ClientID)
 	data.Set("client_secret", a.config.ClientSecret)
 	data.Set("refresh_token", refreshToken)
+	data.Set("redirect_uri", "self")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, nil)
 	if err != nil {
@@ -143,7 +144,7 @@ func (a *Auth) GetAccessToken(ctx context.Context) (*TokenResponse, error) {
 	data.Set("client_id", a.config.ClientID)
 	data.Set("client_secret", a.config.ClientSecret)
 	data.Set("org_id", a.config.OrgID)
-	data.Set("scope", "Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ,Desk.articles.ALL,Desk.tasks.ALL,Desk.timetracker.ALL,Desk.accounts.ALL,Desk.products.READ,Desk.setup.READ")
+	data.Set("scope", "Desk.tickets.ALL,Desk.contacts.READ,Desk.basic.READ")
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, tokenURL, nil)
 	if err != nil {
