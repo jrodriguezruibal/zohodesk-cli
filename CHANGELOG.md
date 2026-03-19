@@ -13,13 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add `access_type=offline` to obtain refresh tokens
   - Remove client_credentials fallback (not supported by Zoho Desk)
   - Automatic token refresh using refresh tokens
-  - Clear error message when authentication is required
+  - Clear error message when authentication required
 - **API Response Parsing**: Handle responses with or without `{data: ...}` wrapper
   - Zoho Desk API returns data directly in some endpoints
   - Fixed Tickets Get/Create, Comments Add responses
-- **Flag Conflicts**: Changed `--context` shorthand from `-c` to `-C` to avoid conflict with `--config`
+- **Flag Conflicts**: 
+  - Changed `--context` shorthand from `-c` to `-C` to avoid conflict with `--config`
+  - Changed `--owner` flag in tasks from `-o` to no shorthand (conflict with `--output`)
 - **Scopes**: Updated to valid Zoho Desk API scopes only
 - **JSON Field Types**: Changed viewCount and likeCount in Article model from int to string
+- **Tags List**: Fixed to handle multiple API response formats
 
 ### Added
 - `--contact-id` flag for ticket creation (contacts are required in Zoho Desk API)
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - **Time Tracking commands** (`time list/add/delete/report`): API endpoint not available in Zoho Desk
 - **Categories commands** (`categories list/get`): API returns null data
+- **Reports commands** (`reports tickets/agents/sla`): API endpoints not available in Zoho Desk
 
 ## [0.9.0] - 2026-03-18
 
